@@ -11,6 +11,13 @@ system = prmtop.createSystem(nonbondedMethod=PME, nonbondedCutoff=1*nanometer,
 
 integrator = LangevinIntegrator(300*kelvin, 1/picosecond, 0.002*picoseconds)
 simulation = Simulation(prmtop.topology, system, integrator)
+
+platform = simulation.context.getPlatform()
+
+print(f"Using platform {platform.getName()} with properties...")
+for prop in platform.getPropertyNames():
+    print(f"    {prop}\t{platform.getPropertyValue(simulation.context,prop)}")
+
 simulation.context.setPositions(pdb.positions)
 
 simulation.saveState("0-initial.xml")
