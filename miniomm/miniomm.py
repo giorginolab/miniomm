@@ -35,9 +35,7 @@ import NAMDBin
 checkpoint_file = "restart.chk"
 
 
-
-
-def run_omm(runtype="NVT"):
+def run_omm():
 
     system_basename = "structure"
 
@@ -45,9 +43,9 @@ def run_omm(runtype="NVT"):
     equil_basename = "equil"
     run_basename = "output"
 
-    dt = 5.0 * u.femtosecond
+    dt = options.timestep * u.femtosecond
     temperature = 300 * u.kelvin
-    pressure = 1*unit.atmospheres
+    pressure = 1 * u.atmospheres
     energyFreq = 1 * u.picosecond
     trajectoryFreq = 1 * u.picosecond
     # restartFreq = trajectoryFreq
@@ -87,73 +85,75 @@ def run_omm(runtype="NVT"):
     else:
         raise FileNotFoundError("No AMBER nor CHARMM run files found")
 
+    req_platform = Null
+    if options.platform is not Null:
+        req_platform = mm.Platform.getPlatformByName(options.platform)
+
+    req_properties = {}
+    if options.device is not None and platform.getName() in ('CUDA', 'OpenCL'):
+        req_properties['DeviceIndex'] = options.device
+    if options.precision is not None and platform.getName() in ('CUDA', 'OpenCL'):
+        req_properties['Precision'] = options.precision
 
     system.addForce(mm.MonteCarloBarostat(pressure, temperature, 25))
 
-    integrator = mm.LangevinIntegrator(T,
+    integrator = mm.LangevinIntegrator(temperature,
                                        frictionCoefficient,
                                        dt)
     integrator.setConstraintTolerance(1e-5)
 
-
-    simulation = app.Simulation(topology, system, integrator)
-    # ... , platform, properties
+    simulation = app.Simulation(topology, system, integrator, req_platform, req_properties)
     ctx = simulation.context
-    platform = simulation.context.getPlatform()
-
-    if options.device is not None and platform.getName() in ('CUDA', 'OpenCL'):
-        properties['DeviceIndex'] = options.device
-    if options.precision is not None and platform.getName() in ('CUDA', 'OpenCL'):
-        properties['Precision'] = options.precision
-
     print(f"Using platform {platform.getName()} with properties:")
     for prop in platform.getPropertyNames():
         print(f"    {prop}\t\t{platform.getPropertyValue(ctx,prop)}")
 
-
-    resume=False
+    resuming = False
     try:
         with open(checkpoint_file, "rb") as cf:
             ctx.loadCheckpoint(cf.read())
         print(f"Successfully loaded {checkpoint_file}")
-        resume=True
+        resuming = True
     except FileNotFoundError:
         print(f"Starting from initial positions")
         pdb = app.PDBFile(f'{system_basename}.pdb')
         ctx.setPositions(pdb.positions)
 
-    log_every = energyFreq/dt
-    assert log_every.is_integer() is True
-    log_every = int(log_every)
+    log_every = util.every(energyFreq,dt)
+    save_every = util.every(trajectoryFreq,dt)
 
-    save_every = trajectoryFreq/dt
-    assert save_every.is_integer() is True
-    save_every = int(save_every)
-
+    # -------------------------------------------------------
     if not os.path.exists(f"{minimize_basename}.xml"):
         print('Minimizing...')
         simulation.minimizeEnergy()
         simulation.saveState(f"{minimize_basename}.xml")
+    else:
+        print(f"{minimize_basename}.xml exists, skipping minimization.")
 
+    # -------------------------------------------------------
     if not os.path.exists(f"{equil_basename}.xml"):
         print('Equilibrating...')
         ctx.setVelocitiesToTemperature(temperature)
-        neq = equilibrationTime/dt
-        assert neq.is_integer() is True
-        util.add_reporters(simulation, equil_basename, log_every, save_every, neq, resume)
+        neq = util.every(equilibrationTime, dt)
+        util.add_reporters(simulation, equil_basename,
+                           log_every, save_every, neq, resuming)
         simulation.step(int(neq))
         simulation.saveState(f"{equil_basename}.xml")
+    else:
+        print(f"{equil_basename}.xml exists, skipping equilibration.")
 
+    # -------------------------------------------------------
     if not os.path.exists(f"{run_basename}.xml"):
         print('Running Production...')
-        nrun = runTime/dt
-        assert nrun.is_integer() is True
-        simulation.reporters=[]
+        nrun = util.every(runTime, dt)
+        simulation.reporters = []
         util.remove_barostat(system)
-        util.add_reporters(simulation, run_basename, log_every, save_every, nrun, resume)
+        util.add_reporters(simulation, run_basename,
+                           log_every, save_every, nrun, resuming)
         simulation.step(int(nrun))
         simulation.saveState(f"{run_basename}.xml")
-    # simulation.step(runTime/dt)
+    else:
+        print(f"{run_basename}.xml exists, skipping run.")
 
     print('Done!')
     return
@@ -163,19 +163,27 @@ def main():
     run_omm()
 
 
-
 if __name__ == "__main__":
     global options
-   
+
     parser = OptionParser()
-    platformNames = [mm.Platform.getPlatform(i).getName() for i in range(mm.Platform.getNumPlatforms())]
-    parser.add_option('--platform', dest='platform', choices=platformNames, help='name of the platform to benchmark')
-    parser.add_option('--pme-cutoff', default='0.9', dest='cutoff', type='float', help='direct space cutoff for PME in nm [default: 0.9]')
-    parser.add_option('--timestep', default='5', dest='timestep', type='float', help='integration timestep in fs [default: 4.0]')
-    parser.add_option('--hours', default='11.5', dest='run_hours', type='float', help='target simulation length in hours [default: 11.5]')
-    parser.add_option('--heavy-hydrogens', action='store_true', default=True, dest='heavy', help='repartition mass to allow a larger time step')
-    parser.add_option('--device', default=None, dest='device', help='device index for CUDA or OpenCL')
-    parser.add_option('--precision', default='single', dest='precision', choices=('single', 'mixed', 'double'), help='precision mode for CUDA or OpenCL: single, mixed, or double [default: single]')
+    platformNames = [mm.Platform.getPlatform(
+        i).getName() for i in range(mm.Platform.getNumPlatforms())]
+    parser.add_option('--platform', dest='platform',
+                      choices=platformNames, help='name of the platform to benchmark')
+    parser.add_option('--pme-cutoff', default='0.9', dest='cutoff',
+                      type='float', help='direct space cutoff for PME in nm [default: 0.9]')
+    parser.add_option('--timestep', default='5', dest='timestep',
+                      type='float', help='integration timestep in fs [default: 4.0]')
+    parser.add_option('--hours', default='11.5', dest='run_hours', type='float',
+                      help='target simulation length in hours [default: 11.5]')
+    parser.add_option('--heavy-hydrogens', action='store_true', default=True,
+                      dest='heavy', help='repartition mass to allow a larger time step')
+    parser.add_option('--device', default=None, dest='device',
+                      help='device index for CUDA or OpenCL')
+    parser.add_option('--precision', default='single', dest='precision', choices=('single', 'mixed',
+                                                                                  'double'),
+                      help='precision mode for CUDA or OpenCL: single, mixed, or double [default: single]')
     (options, args) = parser.parse_args()
 
     main()

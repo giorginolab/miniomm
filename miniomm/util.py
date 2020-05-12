@@ -1,5 +1,6 @@
 import simtk.openmm.openmm
 
+
 def remove_barostat(system):
     """Remove MonteCarloBarostat if present"""
     fs = system.getForces()
@@ -9,7 +10,11 @@ def remove_barostat(system):
             system.removeForce(i)
             return
 
-        
+def every(T,t):
+    f = T/t
+    assert f.is_integer() is True
+    return int(f)
+
 
 def add_reporters(simulation, basename, log_every, save_every, total_steps, continuing):
     simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every, append=continuing))

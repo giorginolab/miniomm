@@ -15,12 +15,17 @@ Python coding.
 
 ## Features
 
+The script is designed to be idempotent, that is, you may stop and
+restart it repeatedly, and it will progress until the end of the
+simulation. This may be convenient for time-limited batch systems.
+
 Supports
 
  * NVT (constant volume) production simulations with PME electrostatics and explicit solvent
  * NPT (constant pressure) equilibration 
- * Pre-built systems in **AMBER** (prmtop) and **CHARMM** (psf) formats
+ * Runs pre-built systems in **AMBER** (prmtop) and **CHARMM** (psf) formats
  * Restarts are enabled out of the box
+
 
 
 
