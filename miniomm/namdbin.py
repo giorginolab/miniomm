@@ -7,6 +7,7 @@ import numpy as np
 import simtk.unit as u
 from simtk.unit.quantity import Quantity
 
+
 class NAMDBin:
 
     def __init__(self, filename):
@@ -15,7 +16,7 @@ class NAMDBin:
             coord_double = np.fromfile(namdbin,
                                        dtype=np.float64,
                                        count=self.n_atoms * 3)
-        self.pos = coord_double.reshape(self.n_atoms,3)
+        self.pos = coord_double.reshape(self.n_atoms, 3)
 
     def getPositions(self):
         return Quantity(self.pos, u.angstrom)

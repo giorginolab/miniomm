@@ -1,7 +1,7 @@
 from simtk.openmm import app
 import sys
+from simtk.openmm.openmm import Platform
 from reporters import *
-
 
 
 def getBanner():
@@ -33,41 +33,56 @@ def parse_xsc(xsc):
 def remove_barostat(system):
     """Remove MonteCarloBarostat if present"""
     fs = system.getForces()
-    for i,f in enumerate(fs):
+    for i, f in enumerate(fs):
         if type(f) == simtk.openmm.openmm.MonteCarloBarostat or \
            type(f) == simtk.openmm.openmm.MonteCarloAnisotropicBarostat:
             system.removeForce(i)
             return
 
-def every(T,t):
+
+def every(T, t):
     f = T/t
     assert f.is_integer() is True
     return int(f)
-    
-    
-def getBestPlatform():
-        from simtk.openmm.openmm import Platform
-        num = Platform.getNumPlatforms();
-        pp_s = {}
-        for i in range(num):
-            pp = Platform.getPlatform(i)
-            pn = pp.getName()
-            ps = float(pp.getSpeed())
-            pp_s[pn]=ps
-
-        so = sorted(pp_s.items(), key=lambda x: x[1], reverse=True)
-        sel = "->"
-        for i in so:
-            print(sel, i[0], i[1])
-            sel = "  "
-        return so[0][0]
 
 
+def get_best_platform():
+    num = Platform.getNumPlatforms()
+    pp_s = {}
+    for i in range(num):
+        pp = Platform.getPlatform(i)
+        pn = pp.getName()
+        ps = float(pp.getSpeed())
+        pp_s[pn] = ps
+
+    so = sorted(pp_s.items(), key=lambda x: x[1], reverse=True)
+    sel = "->"
+    for i in so:
+        print(sel, i[0], i[1])
+        sel = "  "
+    return so[0][0]
+
+
+def check_openmm():
+        version = Platform.getOpenMMVersion()
+        plugindir = Platform.getDefaultPluginsDirectory()
+        print(" OpenMM details:")
+        print("  Version     : OpenMM " + str(version))
+        print("  Plugin dir  : " + str(plugindir))
+
+        # Try loading the plugins and checking for errors
+        Platform.loadPluginsFromDirectory( plugindir )
+        errs = Platform.getPluginLoadFailures()
+        if len(errs):
+            print("Some errors were found loading plugins. Some platforms may not be available: \n")
+        for x in errs:
+            print(x)
 
 
 def add_reporters(simulation, basename, log_every, save_every,
                   total_steps, continuing, checkpoint_file):
-    print(f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps.")
+    print(
+        f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps.")
     simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every,
                                                 append=continuing))
     simulation.reporters.append(app.CheckpointReporter(checkpoint_file,
@@ -103,4 +118,3 @@ def add_reporters(simulation, basename, log_every, save_every,
                                                       speed=True,
                                                       totalSteps=total_steps,
                                                       separator='\t'))
-

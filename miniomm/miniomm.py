@@ -37,7 +37,6 @@ from config import Config
 checkpoint_file = "miniomm_restart.chk"
 
 
-
 def run_omm(options, inp):
 
     dt = float(inp.timestep) * u.femtosecond
@@ -47,40 +46,18 @@ def run_omm(options, inp):
     # restartFreq = trajectoryFreq
     # equilibrationTime = 10 * u.picosecond
     nrun = int(inp.run)
-    basename = inp.trajectoryfile.replace(".xtc","")
+    basename = inp.trajectoryfile.replace(".xtc", "")
 
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
     switchDistance = 7.5 * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
 
-    if dt >= 4 * u.femtosecond:
-        hmr = 4 * u.amu
-        print(f"Enabling hydrogen mass repartitioning at {hmr}")
-    else:
-        hmr = 1 * u.amu
 
-    if 'parmfile' in inp:
-        prmtop = app.AmberPrmtopFile(inp.parmfile)
-        system = prmtop.createSystem(nonbondedMethod=app.PME,
-                                     nonbondedCutoff=nonbondedCutoff,
-                                     switchDistance = switchDistance,
-                                     constraints=app.AllBonds,
-                                     hydrogenMass=hmr)
-        topology = prmtop.topology
-    else:
-        psf = app.CharmmPsfFile(inp.structure)
-        params = app.CharmmParameterSet(inp.parameters, permissive = True)
-        system = psf.createSystem(params,
-                                  nonbondedMethod=app.PME,
-                                  nonbondedCutoff=nonbondedCutoff,
-                                  switchDistance = switchDistance,
-                                  constraints=app.AllBonds,
-                                  hydrogenMass=hmr)
-    
+    util.check_openmm()
 
     if options.platform is None:
         print("Selecting best platform:")
-        req_platform_name = util.getBestPlatform()
+        req_platform_name = util.get_best_platform()
     else:
         print(f"Requesting platform {options.platform}")
         req_platform_name = options.platform
@@ -94,11 +71,34 @@ def run_omm(options, inp):
         print("    Setting Precision = "+options.precision)
         req_properties['Precision'] = options.precision
 
+
+    if dt >= 4 * u.femtosecond:
+        hmr = 4 * u.amu
+        print(f"Enabling hydrogen mass repartitioning at {hmr}")
+    else:
+        hmr = 1 * u.amu
+
+    if 'parmfile' in inp:
+        prmtop = app.AmberPrmtopFile(inp.parmfile)
+        system = prmtop.createSystem(nonbondedMethod=app.PME,
+                                     nonbondedCutoff=nonbondedCutoff,
+                                     switchDistance=switchDistance,
+                                     constraints=app.AllBonds,
+                                     hydrogenMass=hmr)
+        topology = prmtop.topology
+    else:
+        psf = app.CharmmPsfFile(inp.structure)
+        params = app.CharmmParameterSet(inp.parameters, permissive=True)
+        system = psf.createSystem(params,
+                                  nonbondedMethod=app.PME,
+                                  nonbondedCutoff=nonbondedCutoff,
+                                  switchDistance=switchDistance,
+                                  constraints=app.AllBonds,
+                                  hydrogenMass=hmr)
     if 'barostat' in inp and inp.getboolean('barostat'):
         pressure = float(inp.barostatpressure) * u.bar
         print(f"Enabling barostat at {pressure}")
         system.addForce(mm.MonteCarloBarostat(pressure, temperature))
-
 
     # plumed
 
@@ -116,7 +116,6 @@ def run_omm(options, inp):
         print(f"    {prop}\t\t{platform.getPropertyValue(ctx,prop)}")
     print("\n")
 
-    
     resuming = False
     if os.path.exists(checkpoint_file):
         print(f"Attempting to reload {checkpoint_file}")
@@ -125,7 +124,7 @@ def run_omm(options, inp):
         print(f"Successfully loaded {checkpoint_file}")
         ctx.setTime(100000)
         resuming = True
-        
+
     else:
         if 'bincoordinates' in inp:
             print(f"Reading NAMDBin positions from "+inp.bincoordinates)
@@ -142,16 +141,16 @@ def run_omm(options, inp):
         if 'extendedsystem' in inp:
             print("Reading box size from "+inp.extendedsystem)
             box = util.parse_xsc(inp.extendedsystem)
-            boxa = mm.Vec3( box[0], 0., 0.  ) * u.angstrom
-            boxb = mm.Vec3( 0., box[1],  0. ) * u.angstrom
-            boxc = mm.Vec3( 0., 0., box[2]  ) * u.angstrom
+            boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
+            boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
+            boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
 
         elif 'boxsize' in inp:
             print("Using boxsize from input")
-            box = [float(x)  for x in inp.boxsize.split(" ")]
-            boxa = mm.Vec3( box[0], 0., 0.  ) * u.angstrom
-            boxb = mm.Vec3( 0., box[1],  0. ) * u.angstrom
-            boxc = mm.Vec3( 0., 0., box[2]  ) * u.angstrom
+            box = [float(x) for x in inp.boxsize.split(" ")]
+            boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
+            boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
+            boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
 
         else:
             print("Last resort: PDB CRYST1...")
@@ -160,16 +159,16 @@ def run_omm(options, inp):
             except:
                 print("Failed")
                 raise
-            
-        print("Using this cell:\n   "+ str(boxa) + "\n   " + str(boxb) + "\n   " + str(boxc))
+
+        print("Using this cell:\n   " + str(boxa) +
+              "\n   " + str(boxb) + "\n   " + str(boxc))
         ctx.setPeriodicBoxVectors(boxa, boxb, boxc)
 
-    
     # -------------------------------------------------------
     if not resuming:
-        if  'minimize' in inp:
+        if 'minimize' in inp:
             print(f'Minimizing for max {inp.minimize} iterations...')
-            simulation.minimizeEnergy(maxIterations = int(inp.minimize))
+            simulation.minimizeEnergy(maxIterations=int(inp.minimize))
             simulation.saveState(f"minimized.xml")
 
         if 'binvelocities' in inp:
@@ -179,11 +178,12 @@ def run_omm(options, inp):
             ctx.setVelocitiesToTemperature(temperature)
 
     # -------------------------------------------------------
-    print(f'Running for {nrun} timesteps = {nrun * dt.in_units_of(u.nanosecond)}...')
-    
+    print(
+        f'Running for {nrun} timesteps = {nrun * dt.in_units_of(u.nanosecond)}...')
+
     # nrun = util.every(equilibrationTime, dt)
-    log_every = util.every(energyFreq,dt)
-    save_every = util.every(trajectoryFreq,dt)
+    log_every = util.every(energyFreq, dt)
+    save_every = util.every(trajectoryFreq, dt)
 
     util.add_reporters(simulation, basename,
                        log_every, save_every,
@@ -200,10 +200,8 @@ def main(options):
     run_omm(options, inp)
 
 
-    
-
 if __name__ == "__main__":
-#    global options
+    #    global options
 
     parser = OptionParser()
     platformNames = [mm.Platform.getPlatform(

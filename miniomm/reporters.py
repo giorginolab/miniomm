@@ -24,9 +24,9 @@ class StdoutLogReporter:
 
     def headers(self):
         print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
-        "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "iSpeed", "Completion"))
+            "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "iSpeed", "Completion"))
         print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
-        "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "dd:hh:mm:ss"))
+            "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "dd:hh:mm:ss"))
 
     def _init(self, simulation, system, state):
         # Compute the number of degrees of freedom.
@@ -54,32 +54,36 @@ class StdoutLogReporter:
             self._init(simulation, simulation.system, state)
             print(self.headers())
         clockTime = time.time()
-        step = simulation.currentStep;
+        step = simulation.currentStep
         #timex = state.getTime().value_in_unit(picosecond)
         pe = state.getPotentialEnergy().value_in_unit(kilojoules_per_mole)
         ke = state.getKineticEnergy().value_in_unit(kilojoules_per_mole)
         te = pe + ke
-        temp = (2 * state.getKineticEnergy() / (self._dof * unit.MOLAR_GAS_CONSTANT_R)).value_in_unit(unit.kelvin)
+        temp = (2 * state.getKineticEnergy() / (self._dof *
+                                                unit.MOLAR_GAS_CONSTANT_R)).value_in_unit(unit.kelvin)
 
         speed = -1.0
         elapsedSeconds = clockTime - self._initialClockTime
-        if elapsedSeconds>0:
+        if elapsedSeconds > 0:
             elapsedDays = (elapsedSeconds) / 86400.0
             elapsedSteps = simulation.currentStep - self._initialSteps
-            elapsedNs = (state.getTime() - self._initialSimulationTime).value_in_unit(unit.nanosecond)
+            elapsedNs = (
+                state.getTime() - self._initialSimulationTime).value_in_unit(unit.nanosecond)
             speed = elapsedNs / elapsedDays
 
         instaSpeed = -1.0
         instaSeconds = clockTime - self._lastClockTime
-        if instaSeconds>0:
+        if instaSeconds > 0:
             instaDays = instaSeconds / 86400.0
-            instaNs = (state.getTime() - self._lastSimulationTime).value_in_unit(unit.nanosecond)
+            instaNs = (state.getTime() -
+                       self._lastSimulationTime).value_in_unit(unit.nanosecond)
             instaSpeed = instaNs / instaDays
             self._lastClockTime = clockTime
             self._lastSimulationTime = state.getTime()
 
         if elapsedSteps:
-            estimatedTotalSeconds = (self._totalSteps - self._initialSteps) * elapsedSeconds / elapsedSteps
+            estimatedTotalSeconds = (
+                self._totalSteps - self._initialSteps) * elapsedSeconds / elapsedSteps
         else:
             estimatedTotalSeconds = 0
         remainingSeconds = int(estimatedTotalSeconds - elapsedSeconds)
@@ -91,9 +95,11 @@ class StdoutLogReporter:
         remainingSeconds -= remainingMinutes * 60
         remianingString = "--"
         if remainingDays > 0:
-            remainingString = "%d:%d:%02d:%02d" % (remainingDays, remainingHours, remainingMinutes, remainingSeconds)
+            remainingString = "%d:%d:%02d:%02d" % (
+                remainingDays, remainingHours, remainingMinutes, remainingSeconds)
         elif remainingHours > 0:
-            remainingString = "%d:%02d:%02d" % (remainingHours, remainingMinutes, remainingSeconds)
+            remainingString = "%d:%02d:%02d" % (
+                remainingHours, remainingMinutes, remainingSeconds)
         elif remainingMinutes > 0:
             remainingString = "%d:%02d" % (remainingMinutes, remainingSeconds)
         else:
@@ -113,8 +119,7 @@ class StdoutLogReporter:
         self._lastvol = volume
 
         print("# %10ld %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
-        step, pe, ke, te, temp, volume, fluctuation, instaSpeed, remainingString))
+            step, pe, ke, te, temp, volume, fluctuation, instaSpeed, remainingString))
 
         if (math.isnan(pe) or math.isnan(ke) or math.isnan(temp)):
             raise ValueError("Simulation has become unstable. Aborted")
-
