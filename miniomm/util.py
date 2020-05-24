@@ -1,4 +1,17 @@
-import simtk.openmm.openmm
+from simtk.openmm import app
+import sys
+
+def parse_xsc(xsc):
+    with open(xsc) as f:
+        for l in f:
+            if '#' in l:
+                continue
+            ls = l.split(" ")
+            if len(ls) >= 10:
+                boxx = float(ls[1])
+                boxy = float(ls[5])
+                boxz = float(ls[9])
+    return (boxx, boxy, boxz)
 
 
 def remove_barostat(system):
@@ -16,8 +29,9 @@ def every(T,t):
     return int(f)
 
 
-def add_reporters(simulation, basename, log_every, save_every, total_steps, continuing):
-    simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every, append=continuing))
+def add_reporters(simulation, basename, log_every, save_every, total_steps, continuing, checkpoint_file):
+    simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every,
+                                                append=continuing))
     simulation.reporters.append(app.CheckpointReporter(checkpoint_file,
                                                        save_every))
     simulation.reporters.append(app.StateDataReporter(sys.stdout,
