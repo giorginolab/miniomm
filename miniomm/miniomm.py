@@ -52,12 +52,11 @@ def run_omm(options, inp):
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
 
-    if dt > 4 * u.femtosecond:
+    if dt >= 4 * u.femtosecond:
         hmr = 4 * u.amu
         print(f"Enabling hydrogen mass repartitioning at {hmr}")
     else:
         hmr = 1 * u.amu
-
 
     if 'parmfile' in inp:
         prmtop = app.AmberPrmtopFile(inp.parmfile)
@@ -104,7 +103,7 @@ def run_omm(options, inp):
                                 req_platform, req_properties)
     ctx = simulation.context
     platform = ctx.getPlatform()
-    print(f"Using platform {platform.getName()} with properties:")
+    print(f"Got platform {platform.getName()} with properties:")
     for prop in platform.getPropertyNames():
         print(f"    {prop}\t\t{platform.getPropertyValue(ctx,prop)}")
     print("\n")
@@ -205,8 +204,7 @@ if __name__ == "__main__":
                       choices=platformNames, help='name of the platform to benchmark')
     parser.add_option('--device', default=None, dest='device',
                       help='device index for CUDA or OpenCL')
-    parser.add_option('--precision', default='single', dest='precision', choices=('single', 'mixed',
-                                                                                  'double'),
+    parser.add_option('--precision', dest='precision', choices=('single', 'mixed',                                                                          'double'),
                       help='precision mode for CUDA or OpenCL: single, mixed, or double [default: single]')
 
     parser.add_option('--hours', default='11.5', dest='run_hours', type='float',
