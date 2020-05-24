@@ -34,7 +34,7 @@ from config import Config
 #   Input velocities (input.vel)
 #   Randomized velocities
 
-checkpoint_file = "restart_miniomm.chk"
+checkpoint_file = "miniomm_restart.chk"
 
 
 
@@ -50,6 +50,7 @@ def run_omm(options, inp):
     basename = inp.trajectoryfile.replace(".xtc","")
 
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
+    switchDistance = 7.5 * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
 
     if dt >= 4 * u.femtosecond:
@@ -62,6 +63,7 @@ def run_omm(options, inp):
         prmtop = app.AmberPrmtopFile(inp.parmfile)
         system = prmtop.createSystem(nonbondedMethod=app.PME,
                                      nonbondedCutoff=nonbondedCutoff,
+                                     switchDistance = switchDistance,
                                      constraints=app.AllBonds,
                                      hydrogenMass=hmr)
         topology = prmtop.topology
@@ -71,19 +73,25 @@ def run_omm(options, inp):
         system = psf.createSystem(params,
                                   nonbondedMethod=app.PME,
                                   nonbondedCutoff=nonbondedCutoff,
+                                  switchDistance = switchDistance,
                                   constraints=app.AllBonds,
                                   hydrogenMass=hmr)
     
 
-    req_platform = None
-    if options.platform is not None:
+    if options.platform is None:
+        print("Selecting best platform:")
+        req_platform_name = util.getBestPlatform()
+    else:
         print(f"Requesting platform {options.platform}")
-        req_platform = mm.Platform.getPlatformByName(options.platform)
+        req_platform_name = options.platform
+    req_platform = mm.Platform.getPlatformByName(req_platform_name)
 
     req_properties = {}
-    if options.device is not None:
+    if options.device is not None and 'DeviceIndex' in req_platform.getPropertyNames():
+        print("Setting DeviceIndex = "+options.device)
         req_properties['DeviceIndex'] = options.device
-    if options.precision is not None:
+    if options.precision is not None and 'Precision' in req_platform.getPropertyNames():
+        print("Setting Precision = "+options.precision)
         req_properties['Precision'] = options.precision
 
     if 'barostat' in inp and inp.getboolean('barostat'):
@@ -207,7 +215,7 @@ if __name__ == "__main__":
     parser.add_option('--device', default=None, dest='device',
                       help='device index for CUDA or OpenCL')
     parser.add_option('--precision', dest='precision', choices=('single', 'mixed',                                                                          'double'),
-                      help='precision mode for CUDA or OpenCL: single, mixed, or double [default: single]')
+                      help='precision mode for CUDA or OpenCL: single, mixed, or double')
 
     parser.add_option('--hours', default='11.5', dest='run_hours', type='float',
                       help='target simulation length in hours [default: 11.5]')

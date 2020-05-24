@@ -43,6 +43,24 @@ def every(T,t):
     f = T/t
     assert f.is_integer() is True
     return int(f)
+    
+    
+def getBestPlatform():
+        from simtk.openmm.openmm import Platform
+        num = Platform.getNumPlatforms();
+        pp_s = {}
+        for i in range(num):
+            pp = Platform.getPlatform(i)
+            pn = pp.getName()
+            ps = float(pp.getSpeed())
+            pp_s[pn]=ps
+
+        so = sorted(pp_s.items(), key=lambda x: x[1], reverse=True)
+        for i in so:
+            print("    ", i[0], i[1])
+        return so[0][0]
+
+
 
 
 def add_reporters(simulation, basename, log_every, save_every,

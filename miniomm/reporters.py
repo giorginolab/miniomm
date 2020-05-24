@@ -23,10 +23,10 @@ class StdoutLogReporter:
         self._lastvol = None
 
     def headers(self):
-        print("  %10s %11s %11s %11s %8s %8s %8s %8s %8s %11s" % (
-        "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "Speed", "iSpeed", "Completion"))
-        print("  %10s %11s %11s %11s %8s %8s %8s %8s %8s %11s" % (
-        "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "ns/day", "dd:hh:mm:ss"))
+        print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
+        "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "iSpeed", "Completion"))
+        print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
+        "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "dd:hh:mm:ss"))
 
     def _init(self, simulation, system, state):
         # Compute the number of degrees of freedom.
@@ -61,24 +61,22 @@ class StdoutLogReporter:
         te = pe + ke
         temp = (2 * state.getKineticEnergy() / (self._dof * unit.MOLAR_GAS_CONSTANT_R)).value_in_unit(unit.kelvin)
 
+        speed = -1.0
         elapsedSeconds = clockTime - self._initialClockTime
-        elapsedDays = 0
-        if (elapsedSeconds):
+        if elapsedSeconds>0:
             elapsedDays = (elapsedSeconds) / 86400.0
-        elapsedSteps = simulation.currentStep - self._initialSteps
-        elapsedNs = (state.getTime() - self._initialSimulationTime).value_in_unit(unit.nanosecond)
-        if (elapsedDays):
+            elapsedSteps = simulation.currentStep - self._initialSteps
+            elapsedNs = (state.getTime() - self._initialSimulationTime).value_in_unit(unit.nanosecond)
             speed = elapsedNs / elapsedDays
 
+        instaSpeed = -1.0
         instaSeconds = clockTime - self._lastClockTime
-        instaDays = 0
-        if (instaSeconds):
+        if instaSeconds>0:
             instaDays = instaSeconds / 86400.0
-        instaNs = (state.getTime() - self._lastSimulationTime).value_in_unit(unit.nanosecond)
-        if (instaDays):
+            instaNs = (state.getTime() - self._lastSimulationTime).value_in_unit(unit.nanosecond)
             instaSpeed = instaNs / instaDays
-        self._lastClockTime = clockTime
-        self._lastSimulationTime = state.getTime()
+            self._lastClockTime = clockTime
+            self._lastSimulationTime = state.getTime()
 
         if elapsedSteps:
             estimatedTotalSeconds = (self._totalSteps - self._initialSteps) * elapsedSeconds / elapsedSteps
@@ -114,8 +112,8 @@ class StdoutLogReporter:
             fluctuation = 0.
         self._lastvol = volume
 
-        print("# %10ld %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
-        step, pe, ke, te, temp, volume, fluctuation, speed, instaSpeed, remainingString))
+        print("# %10ld %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
+        step, pe, ke, te, temp, volume, fluctuation, instaSpeed, remainingString))
 
         if (math.isnan(pe) or math.isnan(ke) or math.isnan(temp)):
             raise ValueError("Simulation has become unstable. Aborted")
