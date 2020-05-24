@@ -23,10 +23,10 @@ class StdoutLogReporter:
         self._lastvol = None
 
     def headers(self):
-        print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
-        "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "Speed", "Completion"))
-        print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
-        "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "dd:hh:mm:ss"))
+        print("  %10s %11s %11s %11s %8s %8s %8s %8s %8s %11s" % (
+        "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "Speed", "iSpeed", "Completion"))
+        print("  %10s %11s %11s %11s %8s %8s %8s %8s %8s %11s" % (
+        "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "ns/day", "dd:hh:mm:ss"))
 
     def _init(self, simulation, system, state):
         # Compute the number of degrees of freedom.
@@ -41,6 +41,8 @@ class StdoutLogReporter:
         self._initialSteps = simulation.currentStep
         self._initialClockTime = time.time()
         self._initialSimulationTime = state.getTime()
+        self._lastClockTime = self._initialClockTime
+        self._lastSimulationTime = self._initialSimulationTime
         self._inited = True
 
     def describeNextReport(self, simulation):
@@ -67,6 +69,16 @@ class StdoutLogReporter:
         elapsedNs = (state.getTime() - self._initialSimulationTime).value_in_unit(unit.nanosecond)
         if (elapsedDays):
             speed = elapsedNs / elapsedDays
+
+        instaSeconds = clockTime - self._lastClockTime
+        instaDays = 0
+        if (instaSeconds):
+            instaDays = instaSeconds / 86400.0
+        instaNs = (state.getTime() - self._lastSimulationTime).value_in_unit(unit.nanosecond)
+        if (instaDays):
+            instaSpeed = instaNs / instaDays
+        self._lastClockTime = clockTime
+        self._lastSimulationTime = state.getTime()
 
         if elapsedSteps:
             estimatedTotalSeconds = (self._totalSteps - self._initialSteps) * elapsedSeconds / elapsedSteps
@@ -102,8 +114,8 @@ class StdoutLogReporter:
             fluctuation = 0.
         self._lastvol = volume
 
-        print("# %10ld %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
-        step, pe, ke, te, temp, volume, fluctuation, speed, remainingString))
+        print("# %10ld %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
+        step, pe, ke, te, temp, volume, fluctuation, speed, instaSpeed, remainingString))
 
         if (math.isnan(pe) or math.isnan(ke) or math.isnan(temp)):
             raise ValueError("Simulation has become unstable. Aborted")
