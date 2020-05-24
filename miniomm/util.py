@@ -56,8 +56,10 @@ def getBestPlatform():
             pp_s[pn]=ps
 
         so = sorted(pp_s.items(), key=lambda x: x[1], reverse=True)
+        sel = "->"
         for i in so:
-            print("    ", i[0], i[1])
+            print(sel, i[0], i[1])
+            sel = "  "
         return so[0][0]
 
 

@@ -88,10 +88,10 @@ def run_omm(options, inp):
 
     req_properties = {}
     if options.device is not None and 'DeviceIndex' in req_platform.getPropertyNames():
-        print("Setting DeviceIndex = "+options.device)
+        print("    Setting DeviceIndex = "+options.device)
         req_properties['DeviceIndex'] = options.device
     if options.precision is not None and 'Precision' in req_platform.getPropertyNames():
-        print("Setting Precision = "+options.precision)
+        print("    Setting Precision = "+options.precision)
         req_properties['Precision'] = options.precision
 
     if 'barostat' in inp and inp.getboolean('barostat'):
