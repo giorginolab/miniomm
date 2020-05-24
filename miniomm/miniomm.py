@@ -56,17 +56,6 @@ def run_omm():
     frictionCoefficient = 1 / u.picosecond
     hmr = 4 * u.amu
 
-    # forcefield = app.ForceField('amber99sbildn.xml', 'tip3p.xml')
-
-    """
-    system = forcefield.createSystem(pdb.topology,
-                                     nonbondedMethod=app.PME,
-                                     nonbondedCutoff=1.0*u.nanometers,
-                                     constraints=app.AllBonds,
-                                     rigidWater=True,
-                                     ewaldErrorTolerance=0.0005)
-    """
-
     if os.path.exists(f"{system_basename}.prmtop"):
         prmtop = app.AmberPrmtopFile(f"{system_basename}.prmtop")
         system = prmtop.createSystem(nonbondedMethod=app.PME,
