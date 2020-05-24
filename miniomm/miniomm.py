@@ -111,9 +111,11 @@ def run_omm(options, inp):
     
     resuming = False
     if os.path.exists(checkpoint_file):
-        with open(checkpoint_file, "rb") as cf:
+        print(f"Attempting to reload {checkpoint_file}")
+        with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
         print(f"Successfully loaded {checkpoint_file}")
+        ctx.setTime(100000)
         resuming = True
         
     else:

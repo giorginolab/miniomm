@@ -1,5 +1,8 @@
 from simtk.openmm import app
 import sys
+from reporters import *
+
+
 
 def getBanner():
     return """
@@ -49,6 +52,7 @@ def add_reporters(simulation, basename, log_every, save_every,
                                                 append=continuing))
     simulation.reporters.append(app.CheckpointReporter(checkpoint_file,
                                                        save_every))
+    """                                                       
     simulation.reporters.append(app.StateDataReporter(sys.stdout,
                                                       log_every,
                                                       step=True,
@@ -63,6 +67,8 @@ def add_reporters(simulation, basename, log_every, save_every,
                                                       speed=True,
                                                       totalSteps=total_steps,
                                                       separator='\t'))
+    """
+    simulation.reporters.append(StdoutLogReporter(log_every, total_steps))
     simulation.reporters.append(app.StateDataReporter(f"{basename}.log",
                                                       log_every,
                                                       step=True,

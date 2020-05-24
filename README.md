@@ -1,5 +1,15 @@
 # MiniOMM
 
+```
+            _         _                              
+ _ __ ___  (_) _ __  (_)  ___   _ __ ___   _ __ ___  
+| '_ ` _ \ | || '_ \ | | / _ \ | '_ ` _ \ | '_ ` _ \ 
+| | | | | || || | | || || (_) || | | | | || | | | | |
+|_| |_| |_||_||_| |_||_| \___/ |_| |_| |_||_| |_| |_|
+                                                     
+```
+
+
 A simple, supercomputer-friendly OpenMM wrapper for common-case MD runs, with minimal dependencies.
 
 It works if it works for me.
