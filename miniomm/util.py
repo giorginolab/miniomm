@@ -1,6 +1,19 @@
 from simtk.openmm import app
 import sys
 
+def getBanner():
+    return """
+            _         _                              
+ _ __ ___  (_) _ __  (_)  ___   _ __ ___   _ __ ___  
+| '_ ` _ \ | || '_ \ | | / _ \ | '_ ` _ \ | '_ ` _ \ 
+| | | | | || || | | || || (_) || | | | | || | | | | |
+|_| |_| |_||_||_| |_||_| \___/ |_| |_| |_||_| |_| |_|
+                                                     
+A minimalistic OpenMM MD frontend.   
+https://github.com/giorginolab/miniomm
+"""
+
+
 def parse_xsc(xsc):
     with open(xsc) as f:
         for l in f:
@@ -29,7 +42,9 @@ def every(T,t):
     return int(f)
 
 
-def add_reporters(simulation, basename, log_every, save_every, total_steps, continuing, checkpoint_file):
+def add_reporters(simulation, basename, log_every, save_every,
+                  total_steps, continuing, checkpoint_file):
+    print(f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps.")
     simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every,
                                                 append=continuing))
     simulation.reporters.append(app.CheckpointReporter(checkpoint_file,

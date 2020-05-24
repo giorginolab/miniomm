@@ -3,6 +3,7 @@
 import sys
 import os.path
 from optparse import OptionParser
+import warnings
 
 from simtk.openmm import app
 import simtk.openmm as mm
@@ -33,7 +34,7 @@ from config import Config
 #   Input velocities (input.vel)
 #   Randomized velocities
 
-checkpoint_file = "restart.chk"
+checkpoint_file = "restart_miniomm.chk"
 
 
 
@@ -46,14 +47,16 @@ def run_omm(options, inp):
     # restartFreq = trajectoryFreq
     # equilibrationTime = 10 * u.picosecond
     nrun = int(inp.run)
+    basename = inp.trajectoryfile.replace(".xtc","")
 
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
-    hmr = 4 * u.amu
 
-    log_every = util.every(energyFreq,dt)
-    save_every = util.every(trajectoryFreq,dt)
-
+    if dt > 4 * u.femtosecond:
+        hmr = 4 * u.amu
+        print(f"Enabling hydrogen mass repartitioning at {hmr}")
+    else:
+        hmr = 1 * u.amu
 
 
     if 'parmfile' in inp:
@@ -75,6 +78,7 @@ def run_omm(options, inp):
 
     req_platform = None
     if options.platform is not None:
+        print(f"Requesting platform {options.platform}")
         req_platform = mm.Platform.getPlatformByName(options.platform)
 
     req_properties = {}
@@ -103,6 +107,7 @@ def run_omm(options, inp):
     print(f"Using platform {platform.getName()} with properties:")
     for prop in platform.getPropertyNames():
         print(f"    {prop}\t\t{platform.getPropertyValue(ctx,prop)}")
+    print("\n")
 
     
     resuming = False
@@ -118,7 +123,9 @@ def run_omm(options, inp):
             coords = NAMDBin(inp.bincoordinates).getPositions()
         else:
             print(f"Reading PDB positions")
-            pdb = app.PDBFile(inp.coordinates)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                pdb = app.PDBFile(inp.coordinates)
             coords = pdb.positions
         ctx.setPositions(coords)
 
@@ -126,41 +133,52 @@ def run_omm(options, inp):
         if 'extendedsystem' in inp:
             print("Reading box size from "+inp.extendedsystem)
             box = util.parse_xsc(inp.extendedsystem)
+            boxa = mm.Vec3( box[0], 0., 0.  ) * u.angstrom
+            boxb = mm.Vec3( 0., box[1],  0. ) * u.angstrom
+            boxc = mm.Vec3( 0., 0., box[2]  ) * u.angstrom
+
         elif 'boxsize' in inp:
             print("Using boxsize from input")
-            box = [float(x) * u.angstrom for x in inp.boxsize.split(" ")]
+            box = [float(x)  for x in inp.boxsize.split(" ")]
+            boxa = mm.Vec3( box[0], 0., 0.  ) * u.angstrom
+            boxb = mm.Vec3( 0., box[1],  0. ) * u.angstrom
+            boxc = mm.Vec3( 0., 0., box[2]  ) * u.angstrom
+
         else:
+            print("Last resort: PDB CRYST1...")
             try:
-                box = pdb.topology.getPeriodicBoxVectors()
+                (boxa, boxb, boxc) = pdb.topology.getPeriodicBoxVectors()
             except:
-                print("Last resort PDB CRYST failed")
+                print("Failed")
                 raise
             
-        boxa = mm.Vec3( box[0], 0., 0.  ) * u.angstrom
-        boxb = mm.Vec3( 0., box[1],  0. ) * u.angstrom
-        boxc = mm.Vec3( 0., 0., box[2]  ) * u.angstrom
-
-        print("Using this cell: "+ str(boxa) + " " + str(boxb) + " " + str(boxc))
+        print("Using this cell:\n   "+ str(boxa) + "\n   " + str(boxb) + "\n   " + str(boxc))
         ctx.setPeriodicBoxVectors(boxa, boxb, boxc)
-        
 
     
     # -------------------------------------------------------
-    if 'minimize' in inp and not resuming:
-        print('Minimizing...')
-        simulation.minimizeEnergy()
-        simulation.saveState(f"minimized.xml")
+    if not resuming:
+        if  'minimize' in inp:
+            print(f'Minimizing for max {inp.minimize} iterations...')
+            simulation.minimizeEnergy(maxIterations = int(inp.minimize))
+            simulation.saveState(f"minimized.xml")
+
+        if 'binvelocities' in inp:
+            print("binvelocities not supported, randomizing")
+        else:
+            print(f"Resetting thermal velocities at {temperature}")
+            ctx.setVelocitiesToTemperature(temperature)
 
     # -------------------------------------------------------
-    if 'binvelocities' in inp:
-        print("binvelocities not supported, randomizing")
-    
     print(f'Running for {nrun} timesteps = {nrun * dt.in_units_of(u.nanosecond)}...')
-    ctx.setVelocitiesToTemperature(temperature)
     
     # nrun = util.every(equilibrationTime, dt)
-    util.add_reporters(simulation, inp.trajectoryfile,
-                       log_every, save_every, nrun, resuming, checkpoint_file)
+    log_every = util.every(energyFreq,dt)
+    save_every = util.every(trajectoryFreq,dt)
+
+    util.add_reporters(simulation, basename,
+                       log_every, save_every,
+                       nrun, resuming, checkpoint_file)
     simulation.step(nrun)
     simulation.saveState(f"output.xml")
 
@@ -205,4 +223,5 @@ if __name__ == "__main__":
     if len(args) > 0:
         print("Remaining args: "+" ".join(args))
 
+    print(util.getBanner())
     main(options)
