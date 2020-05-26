@@ -81,7 +81,7 @@ def run_omm(options):
         hmr = 1 * u.amu
 
     if 'parmfile' in inp: 
-        print(f"Creating an AMBER system")
+        print(f"Creating an AMBER system...")
         prmtop = app.AmberPrmtopFile(inp.parmfile)
         system = prmtop.createSystem(nonbondedMethod=app.PME,
                                      nonbondedCutoff=nonbondedCutoff,
@@ -90,19 +90,23 @@ def run_omm(options):
                                      hydrogenMass=hmr)
         topology = prmtop.topology
     else:
-        print(f"Creating a CHARMM system")
+        print(f"Creating a CHARMM system...")
         psf = app.CharmmPsfFile(inp.structure)
         params = app.CharmmParameterSet(inp.parameters, permissive=True)
-        
+        psf.setBox( 50.*u.angstrom, 50.*u.angstrom, 50.*u.angstrom) # otherwise
+                                                                    # refuses
+                                                                    # PME
         system = psf.createSystem(params,
                                   nonbondedMethod=app.PME,
                                   nonbondedCutoff=nonbondedCutoff,
                                   switchDistance=switchDistance,
                                   constraints=app.AllBonds,
                                   hydrogenMass=hmr)
+        topology = psf.topology
+
     if 'barostat' in inp and inp.getboolean('barostat'):
         pressure = float(inp.barostatpressure) * u.bar
-        print(f"Enabling barostat at {pressure}")
+        print(f"Enabling barostat at {pressure}...")
         system.addForce(mm.MonteCarloBarostat(pressure, temperature))
 
     if 'plumedfile' in inp:
@@ -130,45 +134,22 @@ def run_omm(options):
         with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
         # ctx.loadCheckpoint(str(checkpoint_file))
-        print(f"Successfully loaded {checkpoint_file}, resuming simulation")
+        print(f"Successfully loaded {checkpoint_file}, resuming simulation...")
         resuming = True
 
     else:
-        print(f"File {checkpoint_file} absent, starting simulation from the beginning.")
-        if 'bincoordinates' in inp:
-            print(f"Reading positions from NAMDBin: "+inp.bincoordinates)
-            coords = NAMDBin(inp.bincoordinates).getPositions()
-        else:
-            import warnings
-            print(f"Reading positions from PDB: ")
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                pdb = app.PDBFile(inp.coordinates)
-            coords = pdb.positions
+        print(f"File {checkpoint_file} absent, starting simulation from the beginning...")
+        coords = util.get_coords(inp)
         ctx.setPositions(coords)
 
     if not resuming:
-        if 'extendedsystem' in inp:
-            print("Reading box size from "+inp.extendedsystem)
-            (boxa, boxb, boxc) = util.parse_xsc_units(inp.extendedsystem)
-        elif 'boxsize' in inp:
-            print("Using boxsize from input string "+inp.boxsize)
-            (boxa, boxb, boxc) = util.parse_boxsize_units(inp.boxsize)
-        else:
-            print("Last resort: PDB CRYST1...")
-            try:
-                (boxa, boxb, boxc) = pdb.topology.getPeriodicBoxVectors()
-            except:
-                raise ValueError("Failed to load CRYST1 information")
-
-        print("Using this cell:\n   " + str(boxa) +
-              "\n   " + str(boxb) + "\n   " + str(boxc))
+        (boxa, boxb, boxc) = util.get_box_size(inp)
         ctx.setPeriodicBoxVectors(boxa, boxb, boxc)
 
         if 'minimize' in inp:
             print(f'Minimizing for max {inp.minimize} iterations...')
             simulation.minimizeEnergy(maxIterations=int(inp.minimize))
-            simulation.saveState(f"minimized.xml")
+            simulation.saveState(f"miniomm_minimized.xml")
         else:
             if 'binvelocities' in inp:
                 print(f"Reading velocities from NAMDBin: "+inp.binvelocities)
@@ -197,8 +178,9 @@ def run_omm(options):
     util.add_reporters(simulation, basename,
                        log_every, save_every,
                        remaining_steps, resuming, checkpoint_file)
+    simulation.saveState(f"miniomm_pre.xml")
     simulation.step(remaining_steps)
-    simulation.saveState(f"output.xml")
+    simulation.saveState(f"miniomm_post.xml")
 
     print('Done!')
     return
@@ -217,16 +199,9 @@ def main():
                       help='device index for CUDA or OpenCL')
     parser.add_option('--precision', dest='precision', choices=('single', 'mixed', 'double'),
                       help='precision mode for CUDA or OpenCL: single, mixed, or double')
-
     parser.add_option('--hours', default='11.5', dest='run_hours', type='float',
                       help='target simulation length in hours [default: 11.5]')
 
-    parser.add_option('--pme-cutoff', default='0.9', dest='cutoff',
-                      type='float', help='direct space cutoff for PME in nm [default: 0.9]')
-    parser.add_option('--timestep', default='5', dest='timestep',
-                      type='float', help='integration timestep in fs [default: 4.0]')
-    parser.add_option('--heavy-hydrogens', action='store_true', default=True,
-                      dest='heavy', help='repartition mass to allow a larger time step')
     (options, args) = parser.parse_args()
 
     if len(args) > 0:

@@ -8,6 +8,14 @@ import simtk.unit as u
 from miniomm.reporters import *
 
 
+_cachedPdb = {}
+def get_pdb(n):
+    if n not in _cachedPdb:
+        _cachedPdb[n] = app.PDBFile(n)
+    return _cachedPdb[n]
+
+
+
 def getBanner():
     return """
             _         _                              
@@ -33,12 +41,14 @@ def parse_xsc(xsc):
                 boxz = float(ls[9])
     return (boxx, boxy, boxz)
 
+
 def parse_xsc_units(xsc):
     box = parse_xsc(xsc)
     boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
     boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
     boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
     return (boxa, boxb, boxc)
+
 
 def parse_boxsize_units(txt):
     box = [float(x) for x in txt.split(" ")]
@@ -48,16 +58,67 @@ def parse_boxsize_units(txt):
     return (boxa, boxb, boxc)
 
 
+def get_box_size(inp):
+    if 'extendedsystem' in inp:
+        print("Reading box size from "+inp.extendedsystem)
+        (boxa, boxb, boxc) = parse_xsc_units(inp.extendedsystem)
+    elif 'boxsize' in inp:
+        print("Using boxsize from input string "+inp.boxsize)
+        (boxa, boxb, boxc) = parse_boxsize_units(inp.boxsize)
+    else:
+        print("Last resort: PDB CRYST1...")
+        try:
+            import warnings
+            print(f"Reading positions from PDB: ")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+            pdb = get_pdb(inp.coordinates)
+            (boxa, boxb, boxc) = pdb.topology.getPeriodicBoxVectors()
+        except:
+            raise ValueError("Failed to load CRYST1 information")
+    print("Using this cell:\n   " + str(boxa) +
+          "\n   " + str(boxb) + "\n   " + str(boxc))
+    return (boxa, boxb, boxc)
 
 
-def remove_barostat(system):
-    """Remove MonteCarloBarostat if present"""
-    fs = system.getForces()
-    for i, f in enumerate(fs):
-        if type(f) == simtk.openmm.openmm.MonteCarloBarostat or \
-           type(f) == simtk.openmm.openmm.MonteCarloAnisotropicBarostat:
-            system.removeForce(i)
-            return
+def get_coords(inp):
+    if 'bincoordinates' in inp:
+        print(f"Reading positions from NAMDBin: "+inp.bincoordinates)
+        coords = NAMDBin(inp.bincoordinates).getPositions()
+    else:
+        import warnings
+        print(f"Reading positions from PDB: ")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            pdb = get_pdb(inp.coordinates)
+        coords = pdb.positions
+    return coords
+
+
+def plumed_parser(fn):
+    # Hack to workaround https://github.com/openmm/openmm-plumed/pull/27
+    # Joins continuation lines and strips comments
+    out = []
+    continuing = False
+    with open(fn) as f:
+        for l in f:
+            l = l.strip()
+            if "#" in l:
+                l = l[:l.find("#")]  # Strip comments
+            dots = l.find("...")
+            if not continuing:
+                if dots == -1:
+                    out.append(l)
+                else:
+                    out.append(l[:dots])
+                    continuing = True
+            else:
+                if dots == -1:
+                    out[-1] = out[-1] + " " + l
+                else:
+                    out[-1] = out[-1] + " " + l[:dots]
+                    continuing = False
+    return "\n".join(out)
 
 
 def every(T, t):
@@ -84,19 +145,19 @@ def get_best_platform():
 
 
 def check_openmm():
-        version = Platform.getOpenMMVersion()
-        plugindir = Platform.getDefaultPluginsDirectory()
-        print(" OpenMM details:")
-        print("  Version     : OpenMM " + str(version))
-        print("  Plugin dir  : " + str(plugindir))
+    version = Platform.getOpenMMVersion()
+    plugindir = Platform.getDefaultPluginsDirectory()
+    print(" OpenMM details:")
+    print("  Version     : OpenMM " + str(version))
+    print("  Plugin dir  : " + str(plugindir))
 
-        # Try loading the plugins and checking for errors
-        Platform.loadPluginsFromDirectory( plugindir )
-        errs = Platform.getPluginLoadFailures()
-        if len(errs):
-            print("Some errors were found loading plugins. Some platforms may not be available: \n")
-        for x in errs:
-            print(x)
+    # Try loading the plugins and checking for errors
+    Platform.loadPluginsFromDirectory(plugindir)
+    errs = Platform.getPluginLoadFailures()
+    if len(errs):
+        print("Some errors were found loading plugins. Some platforms may not be available: \n")
+    for x in errs:
+        print(x)
 
 
 def add_reporters(simulation, basename, log_every, save_every,
