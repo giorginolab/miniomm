@@ -23,10 +23,10 @@ class StdoutLogReporter:
         self._lastvol = None
 
     def headers(self):
-        print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
-            "Step", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "iSpeed", "Completion"))
-        print("  %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
-            "", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "dd:hh:mm:ss"))
+        print("  %10s %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
+            "Step", "Time", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "ISpeed", "Completion"))
+        print("  %10s %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
+            "", "ns", "kJ/mol", "kJ/mol", "kJ/mol", "K", "nm^3", "%", "ns/day", "dd:hh:mm:ss"))
 
     def _init(self, simulation, system, state):
         # Compute the number of degrees of freedom.
@@ -55,7 +55,7 @@ class StdoutLogReporter:
             print(self.headers())
         clockTime = time.time()
         step = simulation.currentStep
-        #timex = state.getTime().value_in_unit(picosecond)
+        timex = state.getTime().value_in_unit(nanosecond)
         pe = state.getPotentialEnergy().value_in_unit(kilojoules_per_mole)
         ke = state.getKineticEnergy().value_in_unit(kilojoules_per_mole)
         te = pe + ke
@@ -118,8 +118,8 @@ class StdoutLogReporter:
             fluctuation = 0.
         self._lastvol = volume
 
-        print("# %10ld %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
-            step, pe, ke, te, temp, volume, fluctuation, instaSpeed, remainingString))
+        print("# %10ld %10.3f %11.2f %11.2f %11.2f %8.2f %8.2f %8.2f %8.2f %11s" % (
+            step, timex, pe, ke, te, temp, volume, fluctuation, instaSpeed, remainingString))
 
         if (math.isnan(pe) or math.isnan(ke) or math.isnan(temp)):
             raise ValueError("Simulation has become unstable. Aborted")

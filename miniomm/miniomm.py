@@ -74,7 +74,7 @@ def run_omm(options):
 
     if dt >= 4 * u.femtosecond:
         hmr = 4 * u.amu
-        print(f"Enabling hydrogen mass repartitioning at {hmr}")
+        print(f"Enabling hydrogen mass repartitioning at mass(H) = {hmr}")
     else:
         hmr = 1 * u.amu
 
@@ -121,8 +121,9 @@ def run_omm(options):
         print(f"Attempting to reload {checkpoint_file}")
         with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
+        # ctx.loadCheckpoint(str(checkpoint_file))
         print(f"Successfully loaded {checkpoint_file}")
-        ctx.setTime(100000)
+        # ctx.setTime(100000)
         resuming = True
 
     else:
