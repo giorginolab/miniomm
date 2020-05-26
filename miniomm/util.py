@@ -1,7 +1,9 @@
-from simtk.openmm import app
 import sys
+
+from simtk.openmm import app
 from simtk.openmm.openmm import Platform
-from reporters import *
+
+from miniomm.reporters import *
 
 
 def getBanner():

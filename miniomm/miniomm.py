@@ -9,9 +9,9 @@ from simtk.openmm import app
 import simtk.openmm as mm
 import simtk.unit as u
 
-import util
-from namdbin import NAMDBin
-from config import Config
+import miniomm.util as util
+from miniomm.namdbin import NAMDBin
+from miniomm.config import Config
 
 
 # Order of priority for the operation to perform
@@ -37,7 +37,9 @@ from config import Config
 checkpoint_file = "miniomm_restart.chk"
 
 
-def run_omm(options, inp):
+def run_omm(options):
+
+    inp = Config(options.input)
 
     dt = float(inp.timestep) * u.femtosecond
     temperature = float(inp.temperature) * u.kelvin
@@ -195,13 +197,7 @@ def run_omm(options, inp):
     return
 
 
-def main(options):
-    inp = Config(options.input)
-    run_omm(options, inp)
-
-
-if __name__ == "__main__":
-    #    global options
+def main():
 
     parser = OptionParser()
     platformNames = [mm.Platform.getPlatform(
@@ -229,5 +225,10 @@ if __name__ == "__main__":
     if len(args) > 0:
         print("Remaining args: "+" ".join(args))
 
+    run_omm(options)
+
+
+if __name__ == "__main__":
     print(util.getBanner())
-    main(options)
+    main()
+    
