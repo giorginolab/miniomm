@@ -2,6 +2,8 @@ import sys
 
 from simtk.openmm import app
 from simtk.openmm.openmm import Platform
+import simtk.openmm as mm
+import simtk.unit as u
 
 from miniomm.reporters import *
 
@@ -30,6 +32,22 @@ def parse_xsc(xsc):
                 boxy = float(ls[5])
                 boxz = float(ls[9])
     return (boxx, boxy, boxz)
+
+def parse_xsc_units(xsc):
+    box = parse_xsc(xsc)
+    boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
+    boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
+    boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
+    return (boxa, boxb, boxc)
+
+def parse_boxsize_units(txt):
+    box = [float(x) for x in txt.split(" ")]
+    boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
+    boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
+    boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
+    return (boxa, boxb, boxc)
+
+
 
 
 def remove_barostat(system):

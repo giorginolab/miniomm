@@ -16,7 +16,12 @@ class NAMDBin:
             coord_double = np.fromfile(namdbin,
                                        dtype=np.float64,
                                        count=self.n_atoms * 3)
-        self.pos = coord_double.reshape(self.n_atoms, 3)
+        self.data = coord_double.reshape(self.n_atoms, 3)
 
     def getPositions(self):
-        return Quantity(self.pos, u.angstrom)
+        return Quantity(self.data, u.angstrom)
+
+    def getVelocities(self):
+        # https://www.ks.uiuc.edu/Research/namd/mailing_list/namd-l.2006-2007/0884.html
+        PDBVELFACTOR = 20.45482706 
+        return Quantity(self.data * PDBVELFACTOR, u.angstrom/u.picosecond)

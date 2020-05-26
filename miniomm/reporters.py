@@ -22,7 +22,7 @@ class StdoutLogReporter:
         self._totalSteps = totalSteps
         self._lastvol = None
 
-    def headers(self):
+    def print_headers(self):
         print("  %10s %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
             "Step", "Time", "PE", "KE", "Total E", "Temp", "Volume", "Fluct.", "ISpeed", "Completion"))
         print("  %10s %10s %11s %11s %11s %8s %8s %8s %8s %11s" % (
@@ -52,7 +52,7 @@ class StdoutLogReporter:
     def report(self, simulation, state):
         if not self._inited:
             self._init(simulation, simulation.system, state)
-            print(self.headers())
+            self.print_headers()
         clockTime = time.time()
         step = simulation.currentStep
         timex = state.getTime().value_in_unit(nanosecond)

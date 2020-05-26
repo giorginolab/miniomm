@@ -122,7 +122,7 @@ def run_omm(options):
         with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
         # ctx.loadCheckpoint(str(checkpoint_file))
-        print(f"Successfully loaded {checkpoint_file}")
+        print(f"Successfully loaded {checkpoint_file}, resuming simulation")
         # ctx.setTime(100000)
         resuming = True
 
@@ -142,18 +142,10 @@ def run_omm(options):
     if not resuming:
         if 'extendedsystem' in inp:
             print("Reading box size from "+inp.extendedsystem)
-            box = util.parse_xsc(inp.extendedsystem)
-            boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
-            boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
-            boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
-
+            (boxa, boxb, boxc) = util.parse_xsc_units(inp.extendedsystem)
         elif 'boxsize' in inp:
-            print("Using boxsize from input")
-            box = [float(x) for x in inp.boxsize.split(" ")]
-            boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
-            boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
-            boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
-
+            print("Using boxsize from input string "+inp.boxsize)
+            (boxa, boxb, boxc) = util.parse_boxsize_units(inp.boxsize)
         else:
             print("Last resort: PDB CRYST1...")
             try:
@@ -165,20 +157,21 @@ def run_omm(options):
               "\n   " + str(boxb) + "\n   " + str(boxc))
         ctx.setPeriodicBoxVectors(boxa, boxb, boxc)
 
-    # -------------------------------------------------------
-    if not resuming:
         if 'minimize' in inp:
             print(f'Minimizing for max {inp.minimize} iterations...')
             simulation.minimizeEnergy(maxIterations=int(inp.minimize))
             simulation.saveState(f"minimized.xml")
-
-        if 'binvelocities' in inp:
-            print("binvelocities not supported, randomizing")
         else:
-            print(f"Resetting thermal velocities at {temperature}")
-            ctx.setVelocitiesToTemperature(temperature)
+            if 'binvelocities' in inp:
+                print(f"Reading velocities from NAMDBin: "+inp.binvelocities)
+                vels = NAMDBin(inp.binvelocities).getVelocities()
+                ctx.setVelocities(vels)
+            else:
+                print(f"Resetting thermal velocities at {temperature}")
+                ctx.setVelocitiesToTemperature(temperature)
 
     # -------------------------------------------------------
+    print("\n\n")
     print(
         f'Running for {nrun} timesteps = {nrun * dt.in_units_of(u.nanosecond)}...')
 
@@ -224,10 +217,10 @@ def main():
     if len(args) > 0:
         print("Remaining args: "+" ".join(args))
 
+    print(util.getBanner())
     run_omm(options)
 
 
 if __name__ == "__main__":
-    print(util.getBanner())
     main()
     
