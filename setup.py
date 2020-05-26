@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "miniomm",
-    version = "0.0.4",
+    version = "0.0.5",
     author = "Toni Giorgino",
     author_email = "toni.giorgino@gmail.com",
     description = ("A simple OpenMM wrapper for common-case MD runs"),
@@ -22,6 +22,7 @@ setup(
         'console_scripts': ['miniomm=miniomm.miniomm:main']
     },
     long_description=read('README.md'),
+    long_description_content_type="text/markdown",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Topic :: Scientific/Engineering :: Chemistry",
