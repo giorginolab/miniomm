@@ -45,12 +45,14 @@ def run_omm(options):
     trajectoryFreq = int(inp.trajectoryperiod) * dt
     # restartFreq = trajectoryFreq
     # equilibrationTime = 10 * u.picosecond
-    nrun = int(inp.run)
+    run_steps = int(inp.run)
     basename = inp.trajectoryfile.replace(".xtc", "")
 
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
     switchDistance = 7.5 * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
+
+    endTime = run_steps * dt
 
 
     util.check_openmm()
@@ -118,15 +120,14 @@ def run_omm(options):
 
     resuming = False
     if os.path.exists(checkpoint_file):
-        print(f"Attempting to reload {checkpoint_file}")
         with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
         # ctx.loadCheckpoint(str(checkpoint_file))
         print(f"Successfully loaded {checkpoint_file}, resuming simulation")
-        # ctx.setTime(100000)
         resuming = True
 
     else:
+        print(f"File {checkpoint_file} absent, starting simulation from the beginning.")
         if 'bincoordinates' in inp:
             print(f"Reading positions from NAMDBin: "+inp.bincoordinates)
             coords = NAMDBin(inp.bincoordinates).getPositions()
@@ -171,18 +172,25 @@ def run_omm(options):
                 ctx.setVelocitiesToTemperature(temperature)
 
     # -------------------------------------------------------
-    print("\n\n")
-    print(
-        f'Running for {nrun} timesteps = {nrun * dt.in_units_of(u.nanosecond)}...')
+    print("\n")
 
-    # nrun = util.every(equilibrationTime, dt)
+    startTime = ctx.getState().getTime()
+    startTime_f = startTime.in_units_of(u.nanoseconds).format("%.3f")
+    endTime_f = endTime.in_units_of(u.nanoseconds).format("%.3f")
+    remaining_steps = round((endTime-startTime)/dt)
+    print(f"Current simulation time is {startTime_f},"+
+          f"running up to {endTime_f}")
+    print(f"Running for {remaining_steps} timesteps = {remaining_steps * dt.in_units_of(u.nanosecond)}...")
+    print("\n")
+
+
     log_every = util.every(energyFreq, dt)
     save_every = util.every(trajectoryFreq, dt)
 
     util.add_reporters(simulation, basename,
                        log_every, save_every,
-                       nrun, resuming, checkpoint_file)
-    simulation.step(nrun)
+                       remaining_steps, resuming, checkpoint_file)
+    simulation.step(remaining_steps)
     simulation.saveState(f"output.xml")
 
     print('Done!')
