@@ -29,4 +29,5 @@ setup(
         "Topic :: Scientific/Engineering :: Physics",
         "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)"
     ],
+    # install_requires = [ 'simtk.openmm', 'simtk.unit' ],
 )

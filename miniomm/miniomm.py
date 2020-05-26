@@ -2,8 +2,6 @@
 
 import sys
 import os.path
-from optparse import OptionParser
-import warnings
 
 from simtk.openmm import app
 import simtk.openmm as mm
@@ -129,10 +127,11 @@ def run_omm(options):
 
     else:
         if 'bincoordinates' in inp:
-            print(f"Reading NAMDBin positions from "+inp.bincoordinates)
+            print(f"Reading positions from NAMDBin: "+inp.bincoordinates)
             coords = NAMDBin(inp.bincoordinates).getPositions()
         else:
-            print(f"Reading PDB positions")
+            import warnings
+            print(f"Reading positions from PDB: ")
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 pdb = app.PDBFile(inp.coordinates)
@@ -159,8 +158,7 @@ def run_omm(options):
             try:
                 (boxa, boxb, boxc) = pdb.topology.getPeriodicBoxVectors()
             except:
-                print("Failed")
-                raise
+                raise ValueError("Failed to load CRYST1 information")
 
         print("Using this cell:\n   " + str(boxa) +
               "\n   " + str(boxb) + "\n   " + str(boxc))
@@ -198,7 +196,7 @@ def run_omm(options):
 
 
 def main():
-
+    from optparse import OptionParser
     parser = OptionParser()
     platformNames = [mm.Platform.getPlatform(
         i).getName() for i in range(mm.Platform.getNumPlatforms())]
@@ -208,7 +206,7 @@ def main():
                       choices=platformNames, help='name of the platform to benchmark')
     parser.add_option('--device', default=None, dest='device',
                       help='device index for CUDA or OpenCL')
-    parser.add_option('--precision', dest='precision', choices=('single', 'mixed',                                                                          'double'),
+    parser.add_option('--precision', dest='precision', choices=('single', 'mixed', 'double'),
                       help='precision mode for CUDA or OpenCL: single, mixed, or double')
 
     parser.add_option('--hours', default='11.5', dest='run_hours', type='float',
