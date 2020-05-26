@@ -74,13 +74,14 @@ def run_omm(options):
         req_properties['Precision'] = options.precision
 
 
-    if dt >= 4 * u.femtosecond:
+    if dt >= 2.5 * u.femtosecond:
         hmr = 4 * u.amu
         print(f"Enabling hydrogen mass repartitioning at mass(H) = {hmr}")
     else:
         hmr = 1 * u.amu
 
-    if 'parmfile' in inp:
+    if 'parmfile' in inp: 
+        print(f"Creating an AMBER system")
         prmtop = app.AmberPrmtopFile(inp.parmfile)
         system = prmtop.createSystem(nonbondedMethod=app.PME,
                                      nonbondedCutoff=nonbondedCutoff,
@@ -89,8 +90,10 @@ def run_omm(options):
                                      hydrogenMass=hmr)
         topology = prmtop.topology
     else:
+        print(f"Creating a CHARMM system")
         psf = app.CharmmPsfFile(inp.structure)
         params = app.CharmmParameterSet(inp.parameters, permissive=True)
+        
         system = psf.createSystem(params,
                                   nonbondedMethod=app.PME,
                                   nonbondedCutoff=nonbondedCutoff,
@@ -102,7 +105,11 @@ def run_omm(options):
         print(f"Enabling barostat at {pressure}")
         system.addForce(mm.MonteCarloBarostat(pressure, temperature))
 
-    # plumed
+    if 'plumedfile' in inp:
+        print("Attempting to load PLUMED plugin...")
+        from openmmplumed import PlumedForce
+        plines = util.plumed_parser(inp.plumedfile)
+        system.addForce(PlumedForce(plines))
 
     integrator = mm.LangevinIntegrator(temperature,
                                        frictionCoefficient,
