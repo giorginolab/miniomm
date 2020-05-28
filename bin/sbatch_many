@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [[ $# -lt 2 ]]; then
+   echo "Usage: $0 <NUM> <ARGS>"
+   echo "Will create a sequence of NUM sbatch jobs dependent on each other with arguments ARGS"
+   exit
+fi
+
+n=$1
+i=1
+shift
+
+jid=$(sbatch --parsable $*)
+echo Scheduled $jid: sbatch $*
+while [[ $i -lt $n ]]; do
+    ojid=$jid
+    jid=$(sbatch --parsable --dependency=afterany:$ojid $* )
+    echo Scheduled $jid: sbatch --dependency=afterany:$ojid $*
+    i=$((i+1))
+done
+
+echo " "
+echo "Done. This is your queue:"
+echo " "
+echo "> squeue -l -u $USER"
+squeue -l -u $USER
+
+

@@ -21,6 +21,7 @@ setup(
     entry_points = {
         'console_scripts': ['miniomm=miniomm.miniomm:main']
     },
+    scripts = ['bin/sbatch_many'],
     long_description=read('README.md'),
     long_description_content_type="text/markdown",
     classifiers=[

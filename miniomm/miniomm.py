@@ -65,7 +65,7 @@ def run_omm(options):
         req_platform_name = options.platform
     req_platform = mm.Platform.getPlatformByName(req_platform_name)
 
-    req_properties = {}
+    req_properties = {}    # {'UseBlockingSync':'true'}
     if options.device is not None and 'DeviceIndex' in req_platform.getPropertyNames():
         print("    Setting DeviceIndex = "+options.device)
         req_properties['DeviceIndex'] = options.device
