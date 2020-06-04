@@ -12,9 +12,9 @@ temperature          	300
 thermostat           	on
 thermostatdamping    	0.1
 thermostattemperature	300
-timestep             	1
+timestep             	2
 trajectoryfile       	output.xtc
 trajectoryperiod     	25000
-run                  	10000000
+run                  	1000000
 plumedfile		diala.plumed
 minimize 100
