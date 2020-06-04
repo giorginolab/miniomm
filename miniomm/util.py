@@ -6,6 +6,7 @@ import simtk.openmm as mm
 import simtk.unit as u
 
 from miniomm.reporters import *
+from miniomm.namdbin import NAMDBin
 
 
 _cachedPdb = {}
