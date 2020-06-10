@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "miniomm",
-    version = "0.0.9",
+    version = "0.0.10",
     author = "Toni Giorgino",
     author_email = "toni.giorgino@gmail.com",
     description = ("A simple OpenMM wrapper for common-case MD runs"),
