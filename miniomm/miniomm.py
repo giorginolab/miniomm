@@ -82,6 +82,8 @@ def run_omm(options):
 
     if 'parmfile' in inp: 
         print(f"Creating an AMBER system...")
+        if 'structure' in inp:
+            print("Warning: 'structure' given but irrelevant for AMBER")
         prmtop = app.AmberPrmtopFile(inp.parmfile)
         system = prmtop.createSystem(nonbondedMethod=app.PME,
                                      nonbondedCutoff=nonbondedCutoff,
@@ -162,6 +164,9 @@ def run_omm(options):
     # -------------------------------------------------------
     print("\n")
 
+    if basename != "output":
+        print(f"Warning: basename is '{basename}' instead of 'output'")
+
     startTime = ctx.getState().getTime()
     startTime_f = startTime.in_units_of(u.nanoseconds).format("%.3f")
     endTime_f = endTime.in_units_of(u.nanoseconds).format("%.3f")
@@ -178,9 +183,16 @@ def run_omm(options):
     util.add_reporters(simulation, basename,
                        log_every, save_every,
                        remaining_steps, resuming, checkpoint_file)
+
     simulation.saveState(f"miniomm_pre.xml")
+
     simulation.step(remaining_steps)
+
     simulation.saveState(f"miniomm_post.xml")
+    final_state = simulation.context.getState(getPositions=True,
+                                              getVelocities=True)
+    final_coor = final_state.getPositions(asNumpy=True)
+    NAMDBin(final_coor).write_file(f"{basename}.coor")
 
     print('Done!')
     return
