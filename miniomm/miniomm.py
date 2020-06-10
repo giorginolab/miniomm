@@ -7,9 +7,10 @@ from simtk.openmm import app
 import simtk.openmm as mm
 import simtk.unit as u
 
+from miniomm.config import Config
 import miniomm.util as util
 from miniomm.namdbin import NAMDBin
-from miniomm.config import Config
+from miniomm.namdxsc import write_xsc
 
 
 # Order of priority for the operation to perform
@@ -49,7 +50,7 @@ def run_omm(options):
     basename = inp.trajectoryfile.replace(".xtc", "")
 
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
-    switchDistance = 7.5 * u.angstrom
+    switchDistance = float(inp.switchdistance) * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
 
     endTime = run_steps * dt
@@ -184,18 +185,26 @@ def run_omm(options):
                        log_every, save_every,
                        remaining_steps, resuming, checkpoint_file)
 
+    # ----------------------------------------
     simulation.saveState(f"miniomm_pre.xml")
 
+    # ----------------------------------------
     simulation.step(remaining_steps)
 
+    # ----------------------------------------
     simulation.saveState(f"miniomm_post.xml")
     final_state = simulation.context.getState(getPositions=True,
                                               getVelocities=True)
     final_coor = final_state.getPositions(asNumpy=True)
     NAMDBin(final_coor).write_file(f"{basename}.coor")
 
+    final_box = final_state.getPeriodicBoxVectors(asNumpy=True)
+    write_xsc(f"{basename}.xsc", remaining_steps, final_state.getTime(), final_box)
+    # ----------------------------------------
     print('Done!')
     return
+
+
 
 
 def main():

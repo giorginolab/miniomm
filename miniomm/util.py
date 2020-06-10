@@ -7,6 +7,7 @@ import simtk.unit as u
 
 from miniomm.reporters import *
 from miniomm.namdbin import NAMDBin
+from miniomm.namdxsc import *
 
 
 _cachedPdb = {}
@@ -30,25 +31,7 @@ https://github.com/giorginolab/miniomm
 """
 
 
-def parse_xsc(xsc):
-    with open(xsc) as f:
-        for l in f:
-            if '#' in l:
-                continue
-            ls = l.split(" ")
-            if len(ls) >= 10:
-                boxx = float(ls[1])
-                boxy = float(ls[5])
-                boxz = float(ls[9])
-    return (boxx, boxy, boxz)
 
-
-def parse_xsc_units(xsc):
-    box = parse_xsc(xsc)
-    boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
-    boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
-    boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
-    return (boxa, boxb, boxc)
 
 
 def parse_boxsize_units(txt):
