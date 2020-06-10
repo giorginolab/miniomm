@@ -165,28 +165,14 @@ def add_reporters(simulation, basename, log_every, save_every,
                   total_steps, continuing, checkpoint_file):
     print(
         f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps.")
+
+    fp=open(f"{basename}.log", "a" if continuing else "w")
     simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every,
-                                                append=continuing))
+                                                append=continuing, enforcePeriodicBox=False))
     simulation.reporters.append(app.CheckpointReporter(checkpoint_file,
                                                        save_every))
-    """                                                       
-    simulation.reporters.append(app.StateDataReporter(sys.stdout,
-                                                      log_every,
-                                                      step=True,
-                                                      time=True,
-                                                      potentialEnergy=True,
-                                                      kineticEnergy=True,
-                                                      totalEnergy=True,
-                                                      temperature=True,
-                                                      volume=True,
-                                                      progress=True,
-                                                      remainingTime=True,
-                                                      speed=True,
-                                                      totalSteps=total_steps,
-                                                      separator='\t'))
-    """
     simulation.reporters.append(StdoutLogReporter(log_every, total_steps))
-    simulation.reporters.append(app.StateDataReporter(f"{basename}.log",
+    simulation.reporters.append(app.StateDataReporter(fp,
                                                       log_every,
                                                       step=True,
                                                       time=True,
