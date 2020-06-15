@@ -48,6 +48,10 @@ def run_omm(options):
     basename = "output"
     trajectory_file = inp.trajectoryfile.replace(".xtc", ".dcd")
 
+    if 'PME' in inp and inp.getboolean('PME'):
+        nonbondedMethod = app.PME
+    else:
+        nonbondedMethod = app.NoCutoff
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
     switchDistance = float(inp.switchdistance) * u.angstrom
     frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
@@ -75,22 +79,35 @@ def run_omm(options):
 
 
     if dt > 2 * u.femtosecond:
-        hmr = 4 * u.amu
-        print(f"Enabling hydrogen mass repartitioning at mass(H) = {hmr}")
+        hydrogenMass = 4 * u.amu
+        constraints = app.AllBonds
+        rigidWater = True
+    elif dt > 0.5 * u.femtosecond:
+        hydrogenMass = None
+        constraints = app.HBonds
+        rigidWater = True
     else:
-        hmr = 1 * u.amu
+        hydrogenMass = None
+        constraints = None
+        rigidWater = False
+
 
     print("")
+    print(f"Hydrogen mass repartitioning: {hydrogenMass}     constraints: {constraints}\n"+
+          f"                 rigid water: {rigidWater}     nonbonded:   {nonbondedMethod}")
+    print("")
+
     if 'parmfile' in inp: 
         print(f"Creating an AMBER system...")
         if 'structure' in inp:
             print("Warning: 'structure' given but ignored for AMBER")
         prmtop = app.AmberPrmtopFile(inp.parmfile)
-        system = prmtop.createSystem(nonbondedMethod=app.PME,
+        system = prmtop.createSystem(nonbondedMethod=nonbondedMethod,
                                      nonbondedCutoff=nonbondedCutoff,
                                      switchDistance=switchDistance,
-                                     constraints=app.AllBonds,
-                                     hydrogenMass=hmr)
+                                     constraints=constraints,
+                                     hydrogenMass=hydrogenMass,
+                                     rigidWater=rigidWater)
         topology = prmtop.topology
     else:
         print(f"Creating a CHARMM system...")
@@ -100,11 +117,12 @@ def run_omm(options):
                                                                     # refuses
                                                                     # PME
         system = psf.createSystem(params,
-                                  nonbondedMethod=app.PME,
+                                  nonbondedMethod=nonbondedMethod,
                                   nonbondedCutoff=nonbondedCutoff,
                                   switchDistance=switchDistance,
-                                  constraints=app.AllBonds,
-                                  hydrogenMass=hmr)
+                                  constraints=constraints,
+                                  hydrogenMass=hydrogenMass,
+                                  rigidWater=rigidWater)
         topology = psf.topology
 
     if 'barostat' in inp and inp.getboolean('barostat'):
