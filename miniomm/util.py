@@ -107,7 +107,8 @@ def plumed_parser(fn):
 
 def every(T, t):
     f = T/t
-    assert f.is_integer() is True
+    if not f.is_integer():
+        raise ValueError(f"{T} is not a multiple of {t}")
     return int(f)
 
 
@@ -144,13 +145,16 @@ def check_openmm():
         print(x)
 
 
-def add_reporters(simulation, basename, log_every, save_every,
+def add_reporters(simulation, trajectory_file, log_every, save_every,
                   total_steps, continuing, checkpoint_file):
     print(
         f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps.")
+    op = "append" if continuing else "write"
+    print(f"Will {op} to trajectory file {trajectory_file}.\n")
 
+    basename="output"
     fp=open(f"{basename}.log", "a" if continuing else "w")
-    simulation.reporters.append(app.DCDReporter(f"{basename}.dcd", save_every,
+    simulation.reporters.append(app.DCDReporter(trajectory_file, save_every,
                                                 append=continuing, enforcePeriodicBox=False))
     simulation.reporters.append(app.CheckpointReporter(checkpoint_file,
                                                        save_every))

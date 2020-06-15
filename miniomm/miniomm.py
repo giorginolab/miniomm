@@ -42,12 +42,11 @@ def run_omm(options):
 
     dt = float(inp.timestep) * u.femtosecond
     temperature = float(inp.temperature) * u.kelvin
-    energyFreq = 1 * u.picosecond
-    trajectoryFreq = int(inp.trajectoryperiod) * dt
-    # restartFreq = trajectoryFreq
-    # equilibrationTime = 10 * u.picosecond
+    logPeriod = 1 * u.picosecond
+    trajectoryPeriod = int(inp.trajectoryperiod) * dt
     run_steps = int(inp.run)
-    basename = inp.trajectoryfile.replace(".xtc", "")
+    basename = "output"
+    trajectory_file = inp.trajectoryfile.replace(".xtc", ".dcd")
 
     nonbondedCutoff = float(inp.cutoff) * u.angstrom
     switchDistance = float(inp.switchdistance) * u.angstrom
@@ -75,16 +74,17 @@ def run_omm(options):
         req_properties['Precision'] = options.precision
 
 
-    if dt >= 2.5 * u.femtosecond:
+    if dt > 2 * u.femtosecond:
         hmr = 4 * u.amu
         print(f"Enabling hydrogen mass repartitioning at mass(H) = {hmr}")
     else:
         hmr = 1 * u.amu
 
+    print("")
     if 'parmfile' in inp: 
         print(f"Creating an AMBER system...")
         if 'structure' in inp:
-            print("Warning: 'structure' given but irrelevant for AMBER")
+            print("Warning: 'structure' given but ignored for AMBER")
         prmtop = app.AmberPrmtopFile(inp.parmfile)
         system = prmtop.createSystem(nonbondedMethod=app.PME,
                                      nonbondedCutoff=nonbondedCutoff,
@@ -130,7 +130,7 @@ def run_omm(options):
     print(f"Got platform {platform.getName()} with properties:")
     for prop in platform.getPropertyNames():
         print(f"    {prop}\t\t{platform.getPropertyValue(ctx,prop)}")
-    print("\n")
+    print("")
 
     resuming = False
     if os.path.exists(checkpoint_file):
@@ -163,25 +163,23 @@ def run_omm(options):
                 ctx.setVelocitiesToTemperature(temperature)
 
     # -------------------------------------------------------
-    print("\n")
-
-    if basename != "output":
-        print(f"Warning: basename is '{basename}' instead of 'output'")
+    print("")
 
     startTime = ctx.getState().getTime()
     startTime_f = startTime.in_units_of(u.nanoseconds).format("%.3f")
     endTime_f = endTime.in_units_of(u.nanoseconds).format("%.3f")
     remaining_steps = round((endTime-startTime)/dt)
-    print(f"Current simulation time is {startTime_f},"+
-          f"running up to {endTime_f}")
-    print(f"Running for {remaining_steps} timesteps = {remaining_steps * dt.in_units_of(u.nanosecond)}...")
-    print("\n")
+    remaining_ns = remaining_steps * dt.value_in_unit(u.nanosecond)
+    print(f"Current simulation time is {startTime_f}, running up to {endTime_f}.")
+    print(f"Will run for {remaining_steps} timesteps = {remaining_ns:.3f} ns...")
+    print("")
 
+    log_every = util.every(logPeriod, dt)
+    save_every = util.every(trajectoryPeriod, dt)
+    if remaining_steps % save_every != 0:
+        raise ValueError("Remaining steps is not a multiple of trajectoryperiod")
 
-    log_every = util.every(energyFreq, dt)
-    save_every = util.every(trajectoryFreq, dt)
-
-    util.add_reporters(simulation, basename,
+    util.add_reporters(simulation, trajectory_file,
                        log_every, save_every,
                        remaining_steps, resuming, checkpoint_file)
 
