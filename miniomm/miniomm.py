@@ -77,7 +77,7 @@ def run_omm(options):
         print("    Setting Precision = "+options.precision)
         req_properties['Precision'] = options.precision
 
-
+    # Same logic as https://software.acellera.com/docs/latest/acemd3/reference.html
     if dt > 2 * u.femtosecond:
         hydrogenMass = 4 * u.amu
         constraints = app.AllBonds
