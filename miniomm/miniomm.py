@@ -42,6 +42,7 @@ def run_omm(options):
 
     dt = float(inp.timestep) * u.femtosecond
     temperature = float(inp.temperature) * u.kelvin
+    thermostattemperature = float(inp.thermostattemperature) * u.kelvin
     logPeriod = 1 * u.picosecond
     trajectoryPeriod = int(inp.trajectoryperiod) * dt
     run_steps = int(inp.run)
@@ -128,7 +129,7 @@ def run_omm(options):
     if 'barostat' in inp and inp.getboolean('barostat'):
         pressure = float(inp.barostatpressure) * u.bar
         print(f"Enabling barostat at {pressure}...")
-        system.addForce(mm.MonteCarloBarostat(pressure, temperature))
+        system.addForce(mm.MonteCarloBarostat(pressure, thermostattemperature))
 
     if 'plumedfile' in inp:
         print("Attempting to load PLUMED plugin...")
@@ -136,7 +137,7 @@ def run_omm(options):
         plines = util.plumed_parser(inp.plumedfile)
         system.addForce(PlumedForce(plines))
 
-    integrator = mm.LangevinIntegrator(temperature,
+    integrator = mm.LangevinIntegrator(thermostattemperature,
                                        frictionCoefficient,
                                        dt)
     integrator.setConstraintTolerance(1e-5)
@@ -179,6 +180,13 @@ def run_omm(options):
             else:
                 print(f"Resetting thermal velocities at {temperature}")
                 ctx.setVelocitiesToTemperature(temperature)
+
+    # -------------------------------------------------------
+    print("")
+    unused_keys = inp.unusedKeys()
+    if len(unused_keys):
+        print("WARNING: These input keys were unused: "+(", ".join(unused_keys)))
+    
 
     # -------------------------------------------------------
     print("")
