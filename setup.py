@@ -19,7 +19,7 @@ setup(
     url = "https://github.com/giorginolab/miniomm",
     packages=['miniomm', 'tests'],
     entry_points = {
-        'console_scripts': ['miniomm=miniomm.miniomm:main']
+        'console_scripts': ['miniomm=miniomm.__main__:main']
     },
     scripts = ['bin/sbatch_many'],
     long_description=read('README.md'),

@@ -18,22 +18,6 @@ def get_pdb(n):
 
 
 
-def getBanner():
-    return """
-            _         _                              
- _ __ ___  (_) _ __  (_)  ___   _ __ ___   _ __ ___  
-| '_ ` _ \ | || '_ \ | | / _ \ | '_ ` _ \ | '_ ` _ \ 
-| | | | | || || | | || || (_) || | | | | || | | | | |
-|_| |_| |_||_||_| |_||_| \___/ |_| |_| |_||_| |_| |_|
-                                                     
-A minimalistic OpenMM MD frontend.   
-https://github.com/giorginolab/miniomm
-"""
-
-
-
-
-
 def parse_boxsize_units(txt):
     box = [float(x) for x in txt.split(" ")]
     boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
