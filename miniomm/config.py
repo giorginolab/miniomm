@@ -15,6 +15,7 @@ class MultiOrderedDict(OrderedDict):
 
 class Config():
     def __init__(self, fn):
+        self.warnings = []
         self.usedKeys = {}
         self.cp = configparser.RawConfigParser(dict_type=MultiOrderedDict,
                                                delimiters=[' ', "\t", '='],
@@ -25,6 +26,13 @@ class Config():
     def get(self, k):
         self.usedKeys[k.lower()] = 1
         return self.cp.get(root_section, k)
+
+    def getWithDefault(self, k, v):
+        if k in self:
+            return self.get(k)
+        else:
+            self.warnings.append(f"WARNING: Using default {k} = {v}")
+            return v
 
     def __getattr__(self, k):
         return self.get(k)
@@ -49,6 +57,14 @@ class Config():
         kl3 = set(kl2)
         sdiff = kl3.difference(self.usedKeys.keys())
         return sdiff
+        
+    def printWarnings(self):
+        for m in self.warnings:
+             print(m)
+        unused_keys = self.unusedKeys()
+        if len(unused_keys):
+             print("WARNING: These input keys were unused: "+(", ".join(unused_keys)))
+
 
 
 if __name__ == "__main__":

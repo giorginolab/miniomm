@@ -1,0 +1,20 @@
+#
+# bincoordinates       	input.coor
+coordinates          	dia2.pdb
+parameters		par_all27_prot_lipid.prm
+structure		dia2.psf
+boxsize  65 65 65
+cutoff               	9
+#extendedsystem       	input.xsc
+pme                  	on
+switchdistance       	7.5
+temperature          	300
+thermostat           	on
+thermostatdamping    	0.1
+thermostattemperature	300
+timestep             	2
+trajectoryfile       	output.xtc
+trajectoryperiod     	25000
+run                  	1000000
+plumedfile		diala.plumed
+minimize 100

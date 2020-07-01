@@ -36,6 +36,8 @@ from miniomm.namdxsc import write_xsc
 checkpoint_file = "miniomm_restart.chk"
 
 
+
+
 def run_omm(options):
 
     inp = Config(options.input)
@@ -47,15 +49,15 @@ def run_omm(options):
     trajectoryPeriod = int(inp.trajectoryperiod) * dt
     run_steps = int(inp.run)
     basename = "output"
-    trajectory_file = inp.trajectoryfile.replace(".xtc", ".dcd")
+    trajectory_file = basename + ".dcd"
 
     if 'PME' in inp and inp.getboolean('PME'):
         nonbondedMethod = app.PME
     else:
         nonbondedMethod = app.NoCutoff
-    nonbondedCutoff = float(inp.cutoff) * u.angstrom
-    switchDistance = float(inp.switchdistance) * u.angstrom
-    frictionCoefficient = float(inp.thermostatdamping) / u.picosecond
+    nonbondedCutoff = float(inp.getWithDefault("cutoff", 9.0)) * u.angstrom
+    switchDistance = float(inp.getWithDefault("switchdistance", 7.5)) * u.angstrom
+    frictionCoefficient = float(inp.getWithDefault("thermostatdamping", 0.1)) / u.picosecond
 
     endTime = run_steps * dt
 
@@ -183,10 +185,7 @@ def run_omm(options):
 
     # -------------------------------------------------------
     print("")
-    unused_keys = inp.unusedKeys()
-    if len(unused_keys):
-        print("WARNING: These input keys were unused: "+(", ".join(unused_keys)))
-    
+    inp.printWarnings()
 
     # -------------------------------------------------------
     print("")
