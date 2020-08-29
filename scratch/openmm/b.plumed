@@ -1,0 +1,42 @@
+# uncomment next line if your restart
+#RESTART
+
+# load extra file
+# set to correct location
+LOAD FILE=EMMIVox.cpp
+
+# include topology info - set path a PDB file
+MOLINFO STRUCTURE=../0-TOPO/step5_charmm2gmx.pdb
+
+# define all heavy atoms - set path to index file
+protein-h: GROUP NDX_FILE=../0-TOPO/index.ndx NDX_GROUP=PROT-H
+
+# make protein whole and in the cell where map is defined
+WHOLEMOLECULES ...
+ADDREFERENCE 
+ENTITY0=1-6701         REF0=5.3607,4.5911,3.1497
+ENTITY1=6702-6741      REF1=3.2439,3.3684,6.0308
+... WHOLEMOLECULES
+
+# create EMMI score
+EMMIVOX ...
+# name of this action
+LABEL=gmm
+# general parameters - do not change this! 
+TEMP=303.15 NL_STRIDE=50 NL_CUTOFF=0.5 NS_CUTOFF=1.0
+# define atoms for cryo-EM restraint and read experimental data
+# set path to map file if not in current directory
+ATOMS=protein-h DATA_FILE=map_zoned_align.dat
+# info about the experimental map
+NORM_DENSITY=2068.185 RESOLUTION=0.1 VOXEL=0.1012
+# data likelihood (or noise model): Marginal
+NOISETYPE=MARGINAL SIGMA_MIN=0.2
+# write output
+STATUS_FILE=EMMIStatus WRITE_STRIDE=2500
+...
+
+# translate into bias - updated every 2 time steps
+emr: BIASVALUE ARG=gmm.scoreb STRIDE=2
+
+# print output to file
+PRINT ARG=gmm.* FILE=COLVAR STRIDE=2500

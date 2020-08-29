@@ -1,0 +1,10 @@
+DISTANCES ...
+  LABEL=dist
+# we can also insert comments here
+  ATOMS1=1,300
+# multiple kewords per line are allowed
+  ATOMS2=1,400 ATOMS3=1,500
+#empty lines are also allowed
+
+... DISTANCES
+

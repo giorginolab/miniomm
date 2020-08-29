@@ -63,7 +63,7 @@ class Config():
              print(m)
         unused_keys = self.unusedKeys()
         if len(unused_keys):
-             print("WARNING: These input keys were unused: "+(", ".join(unused_keys)))
+             print("WARNING: These input keys were given but are unused: "+(", ".join(unused_keys)))
 
 
 
