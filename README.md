@@ -14,6 +14,7 @@ A simple, supercomputer-friendly OpenMM wrapper for common-case MD runs, with mi
 
 It works if it works for me.
 
+
 ## Rationale
 
 Developed to launch OpenMM runs on recent GPU-endowed ppc64le
@@ -23,20 +24,35 @@ related packages (such as mdtraj) cannot. MiniOMM aims to provide a
 Python coding.
 
 
-## Features
+## Installation
 
-The script is designed to be idempotent, that is, you may stop and
-restart it repeatedly, and it will progress until the end of the
-simulation. This may be convenient for time-limited batch systems.
+See the [Wiki](https://github.com/giorginolab/miniomm/wiki)
+for (somewhat site-specific) installation instructions.
+
+
+## Features
 
 Supports
 
  * NVT (constant volume) production simulations with PME electrostatics and explicit solvent
- * NPT (constant pressure) equilibration 
+ * NPT (constant pressure) equilibration
  * Runs pre-built systems in **AMBER** (prmtop) and **CHARMM** (psf) formats
- * Restarts are enabled out of the box
+ * Checkpoints and restarts are enabled out of the box
+ * Plumed, if openmm-plumed is installed
+ * Tested on Linux x64 and ppc64le, with and without NVIDIA GPUs
+
+Does not support
+
+ * Restraints of any kind
+
+May support in the future, given sufficient interest
+
+ * Any feature provided by OpenMM, e.g. custom potentials.
 
 
+The script is designed to be idempotent, that is, you may stop and
+restart it repeatedly, and it will progress until the end of the
+simulation. This may be convenient for time-limited batch systems.
 
 
 
