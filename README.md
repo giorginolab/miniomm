@@ -14,6 +14,7 @@ A simple, supercomputer-friendly OpenMM wrapper for common-case MD runs, with mi
 
 It works if it works for me.
 
+[![PyPI version](https://badge.fury.io/py/miniomm.svg)](https://badge.fury.io/py/miniomm)
 
 ## Rationale
 
