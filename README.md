@@ -26,8 +26,21 @@ Python coding.
 
 ## Installation
 
+In principle, the usual `pip install miniomm` should be sufficient.
+However, you will need additional software:
+
+ * OpenMM and its Python interface
+ * Optionally, Plumed, openmm-plumed and its Python interface
+
 See the [Wiki](https://github.com/giorginolab/miniomm/wiki)
 for (somewhat site-specific) installation instructions.
+
+
+## Syntax
+
+For now, the syntax is only documented in the examples files. It
+is a simple list of "keyword value" pairs, with sensible
+defaults, and largely compatible with ACEMD.
 
 
 ## Features
