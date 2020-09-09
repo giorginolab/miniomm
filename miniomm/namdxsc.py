@@ -17,11 +17,13 @@ def parse_xsc(xsc):
         for l in f:
             if '#' in l:
                 continue
-            ls = l.split(" ")
+            ls = l.split()
             if len(ls) >= 10:
                 boxx = float(ls[1])
                 boxy = float(ls[5])
                 boxz = float(ls[9])
+            else:
+                raise ValueError("Strange .xsc format line: "+l)
     return (boxx, boxy, boxz)
 
 
