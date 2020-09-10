@@ -18,11 +18,11 @@ It works if it works for me.
 
 ## Rationale
 
-Developed to launch OpenMM runs on recent GPU-endowed ppc64le
-machines. OpenMM can currently be installed via Conda, but several
-related packages (such as mdtraj) cannot. MiniOMM aims to provide a
-"minimal working" environment for MD runs without requiring C++ or
-Python coding.
+Developed to launch OpenMM runs on recent GPU-endowed machines,
+including those with ppc64le architecture. This is because OpenMM can
+currently be installed (also via Conda), but several related packages
+such as `mdtraj` cannot. MiniOMM aims to provide a "minimal working"
+environment for MD runs without requiring C++ or Python coding.
 
 
 ## Installation

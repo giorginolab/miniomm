@@ -2,6 +2,8 @@
 
 import sys
 import os.path
+import socket
+import datetime
 
 from simtk.openmm import app
 import simtk.openmm as mm
@@ -95,10 +97,16 @@ def run_omm(options):
         rigidWater = False
 
 
-    print("")
-    print(f"Hydrogen mass repartitioning: {hydrogenMass}     constraints: {constraints}\n"+
-          f"                 rigid water: {rigidWater}     nonbonded:   {nonbondedMethod}")
-    print("")
+    print(f"""
+                            Host: {socket.gethostname()}
+                            Date: {datetime.datetime.now().ctime()}
+                     Constraints: {constraints}
+                     Rigid water: {rigidWater}
+                       Nonbonded: {nonbondedMethod}
+    Hydrogen mass repartitioning: {hydrogenMass}
+           $OPENMM_CUDA_COMPILER: {os.environ.get('OPENMM_CUDA_COMPILER','(Undefined)')}
+    """)
+
 
     if 'parmfile' in inp: 
         print(f"Creating an AMBER system...")
