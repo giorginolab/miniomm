@@ -166,6 +166,7 @@ def run_omm(options):
         with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
         # ctx.loadCheckpoint(str(checkpoint_file))
+        util.round_odd_state_time(ctx)
         print(f"Successfully loaded {checkpoint_file}, resuming simulation...")
         resuming = True
 
