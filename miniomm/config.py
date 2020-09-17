@@ -57,13 +57,15 @@ class Config():
         kl3 = set(kl2)
         sdiff = kl3.difference(self.usedKeys.keys())
         return sdiff
-        
+
     def printWarnings(self):
         for m in self.warnings:
              print(m)
         unused_keys = self.unusedKeys()
         if len(unused_keys):
-             print("WARNING: These input keys were given but are unused: "+(", ".join(unused_keys)))
+             print("WARNING: These input keys were given but are unused in this run: ")
+             for u in unused_keys:
+                  print(" - "+u)
 
 
 

@@ -113,13 +113,13 @@ def get_best_platform():
     return so[0][0]
 
 
-def round_odd_state_time(ctx):
+def round_state_time(ctx):
     from simtk.unit.quantity import Quantity
     t = ctx.getState().getTime()
     t_fs = t.value_in_unit(u.femtosecond)
     t_fs_10 = round(t_fs, -1)
     t_diff = t_fs_10 - t_fs
-    print(f"Snapping state time by {t_diff} fs to closest 10 fs: {t_fs} -> {t_fs_10}") 
+    print(f"Rounding state time by {t_diff} fs to closest 10 fs: {t_fs} -> {t_fs_10}") 
     t_10 = Quantity(t_fs_10, u.femtosecond)
     ctx.setTime(t_10)
 
