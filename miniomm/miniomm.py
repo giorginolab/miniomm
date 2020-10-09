@@ -44,19 +44,19 @@ def run_omm(options):
 
     inp = Config(options.input)
 
-    dt = float(inp.timestep) * u.femtosecond
-    temperature = float(inp.temperature) * u.kelvin
-    thermostattemperature = float(inp.thermostattemperature) * u.kelvin
+    dt = float(inp.getWithDefault("timestep", 4)) * u.femtosecond
+    temperature = float(inp.getWithDefault("temperature", 300)) * u.kelvin
+    thermostattemperature = float(inp.getWithDefault("thermostattemperature", 300)) * u.kelvin
     logPeriod = 1 * u.picosecond
-    trajectoryPeriod = int(inp.trajectoryperiod) * dt
+    trajectoryPeriod = int(inp.getWithDefault("trajectoryperiod", 25000)) * dt
     run_steps = int(inp.run)
     basename = "output"
     trajectory_file = basename + ".dcd"
 
-    if 'PME' in inp and inp.getboolean('PME'):
-        nonbondedMethod = app.PME
-    else:
+    if 'PME' in inp and not inp.getboolean('PME'):
         nonbondedMethod = app.NoCutoff
+    else:
+        nonbondedMethod = app.PME
     nonbondedCutoff = float(inp.getWithDefault("cutoff", 9.0)) * u.angstrom
     switchDistance = float(inp.getWithDefault("switchdistance", 7.5)) * u.angstrom
     frictionCoefficient = float(inp.getWithDefault("thermostatdamping", 0.1)) / u.picosecond
@@ -166,7 +166,7 @@ def run_omm(options):
         with open(checkpoint_file, 'rb') as cf:
             ctx.loadCheckpoint(cf.read())
         # ctx.loadCheckpoint(str(checkpoint_file))
-        util.round_state_time(ctx)
+        util.round_state_time(ctx, 10*dt)
         print(f"Successfully loaded {checkpoint_file}, resuming simulation...")
         resuming = True
 
