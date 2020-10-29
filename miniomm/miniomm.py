@@ -38,6 +38,19 @@ from miniomm.namdxsc import write_xsc
 checkpoint_file = "miniomm_restart.chk"
 
 
+def _printPluginInfo():
+    lp = mm.version.openmm_library_path
+    print(f"""
+           $OPENMM_CUDA_COMPILER: {os.environ.get('OPENMM_CUDA_COMPILER','(Undefined)')}
+       OpenMM Library Path (...): {lp}
+                  Loaded Plugins: """)
+    for p in  mm.pluginLoadedLibNames:
+        print("                                  "+p.replace(lp,"..."))
+    print("            Loaded Plugin errors:")
+    for e in mm.Platform.getPluginLoadFailures():
+        print("                                  "+e)
+    print("\n")
+
 
 
 def run_omm(options):
@@ -100,12 +113,13 @@ def run_omm(options):
     print(f"""
                             Host: {socket.gethostname()}
                             Date: {datetime.datetime.now().ctime()}
+                        Timestep: {dt}
                      Constraints: {constraints}
                      Rigid water: {rigidWater}
                        Nonbonded: {nonbondedMethod}
     Hydrogen mass repartitioning: {hydrogenMass}
-           $OPENMM_CUDA_COMPILER: {os.environ.get('OPENMM_CUDA_COMPILER','(Undefined)')}
     """)
+    _printPluginInfo()
 
 
     if 'parmfile' in inp: 
