@@ -137,7 +137,7 @@ def run_omm(options):
     else:
         print(f"Creating a CHARMM system...")
         psf = app.CharmmPsfFile(inp.structure)
-        params = app.CharmmParameterSet(inp.parameters, permissive=True)
+        params = app.CharmmParameterSet(inp.parameters, permissive=False)
         psf.setBox( 50.*u.angstrom, 50.*u.angstrom, 50.*u.angstrom) # otherwise
                                                                     # refuses
                                                                     # PME
