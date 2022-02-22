@@ -6,5 +6,5 @@ release:
 	git push --tags
 	mkdir -p dist-old
 	-mv dist/* dist-old
-	python setup.py sdist
+	python -m build
 	twine upload dist/*
