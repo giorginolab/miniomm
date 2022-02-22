@@ -89,8 +89,8 @@ def run_omm(options):
 
     req_properties = {}    # {'UseBlockingSync':'true'}
     if options.device is not None and 'DeviceIndex' in req_platform.getPropertyNames():
-        print("    Setting DeviceIndex = "+options.device)
-        req_properties['DeviceIndex'] = options.device
+        print(f"    Setting DeviceIndex = {options.device}")
+        req_properties['DeviceIndex'] = str(options.device)
     if options.precision is not None and 'Precision' in req_platform.getPropertyNames():
         print("    Setting Precision = "+options.precision)
         req_properties['Precision'] = options.precision
@@ -141,7 +141,7 @@ def run_omm(options):
             params = app.CharmmParameterSet(inp.parameters, permissive=False)
         except Exception as e:
             print("** Error reported: "+str(e))
-            print("** Error reading parameter set. Make sure atom masses are present in the parameter file.")
+            print("** Error reading parameter set. Make sure the ATOMS section and MASS items are present in the parameter file.")
             raise e
         psf.setBox( 50.*u.angstrom, 50.*u.angstrom, 50.*u.angstrom) # otherwise
                                                                     # refuses

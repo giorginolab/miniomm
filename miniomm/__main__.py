@@ -3,6 +3,7 @@ import openmm.openmm as mm
 from miniomm.miniomm import run_omm
 import miniomm.util 
 import miniomm
+import argparse
 
 
 def _banner():
@@ -19,28 +20,27 @@ https://github.com/giorginolab/miniomm
 
 
 def main():
-    from optparse import OptionParser
-    parser = OptionParser()
+    parser = argparse.ArgumentParser(
+        description="MiniOMM, a minimalistic OpenMM frontend to run MD systems.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     platformNames = [mm.Platform.getPlatform(
         i).getName() for i in range(mm.Platform.getNumPlatforms())]
-    parser.add_option('--input', dest='input',
+    parser.add_argument('--input', type=str,
                       default="input", help='name of the input file')
-    parser.add_option('--platform', dest='platform',
+    parser.add_argument('--platform', type=str,
                       choices=platformNames, help='name of the platform to benchmark')
-    parser.add_option('--device', default=None, dest='device',
+    parser.add_argument('--device', default=None, type=int,
                       help='device index for CUDA or OpenCL')
-    parser.add_option('--precision', dest='precision', choices=('single', 'mixed', 'double'),
+    parser.add_argument('--precision',  choices=('single', 'mixed', 'double'),
                       help='precision mode for CUDA or OpenCL: single, mixed, or double')
-    parser.add_option('--hours', default='11.5', dest='run_hours', type='float',
-                      help='target simulation length in hours [default: 11.5]')
+    parser.add_argument('--hours', default=11.5, dest='run_hours', type=float,
+                      help='target simulation length in hours')
 
-    (options, args) = parser.parse_args()
-
-    if len(args) > 0:
-        print("Remaining args: "+" ".join(args))
+    args = parser.parse_args()
 
     print(_banner())
-    run_omm(options)
+    run_omm(args)
 
 
 if __name__ == "__main__":
