@@ -5,9 +5,9 @@ import os.path
 import socket
 import datetime
 
-from simtk.openmm import app
-import simtk.openmm as mm
-import simtk.unit as u
+from openmm import app
+import openmm as mm
+import openmm.unit as u
 
 from miniomm.config import Config
 import miniomm.util as util
@@ -137,7 +137,12 @@ def run_omm(options):
     else:
         print(f"Creating a CHARMM system...")
         psf = app.CharmmPsfFile(inp.structure)
-        params = app.CharmmParameterSet(inp.parameters, permissive=False)
+        try:
+            params = app.CharmmParameterSet(inp.parameters, permissive=False)
+        except Exception as e:
+            print("** Error reported: "+str(e))
+            print("** Error reading parameter set. Make sure atom masses are present in the parameter file.")
+            raise e
         psf.setBox( 50.*u.angstrom, 50.*u.angstrom, 50.*u.angstrom) # otherwise
                                                                     # refuses
                                                                     # PME

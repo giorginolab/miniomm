@@ -1,9 +1,9 @@
 import sys
 
-from simtk.openmm import app
-from simtk.openmm.openmm import Platform
-import simtk.openmm as mm
-import simtk.unit as u
+from openmm import app
+from openmm.openmm import Platform
+import openmm as mm
+import openmm.unit as u
 
 from miniomm.reporters import *
 from miniomm.namdbin import NAMDBin
@@ -114,7 +114,7 @@ def get_best_platform():
 
 
 def round_state_time(ctx, grain):
-    from simtk.unit.quantity import Quantity
+    from openmm.unit.quantity import Quantity
     t = ctx.getState().getTime()
 #    t_fs = t.value_in_unit(u.femtosecond)
     t_r = round(t/grain)*grain

@@ -1,9 +1,9 @@
-from simtk.unit import *
-from simtk.openmm import *
-from simtk.unit import nanometer
-from simtk.unit import angstrom
-from simtk.unit import picosecond
-from simtk.unit import femtosecond
+from openmm.unit import *
+from openmm.openmm import *
+from openmm.unit import nanometer
+from openmm.unit import angstrom
+from openmm.unit import picosecond
+from openmm.unit import femtosecond
 
 
 import numpy as np

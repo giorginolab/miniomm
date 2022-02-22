@@ -4,10 +4,10 @@
 
 
 import numpy as np
-import simtk.unit as u
-import simtk.openmm as mm
+import openmm.unit as u
+import openmm.openmm as mm
 
-from simtk.unit.quantity import Quantity
+from openmm.unit.quantity import Quantity
 
 
 

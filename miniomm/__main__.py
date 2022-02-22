@@ -1,4 +1,4 @@
-import simtk.openmm as mm
+import openmm.openmm as mm
 
 from miniomm.miniomm import run_omm
 import miniomm.util 

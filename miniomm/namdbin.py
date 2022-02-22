@@ -4,8 +4,8 @@
 
 
 import numpy as np
-import simtk.unit as u
-from simtk.unit.quantity import Quantity
+import openmm.unit as u
+from openmm.unit.quantity import Quantity
 
 # self.data is a Numpy array in Angstroms
 
