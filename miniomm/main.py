@@ -45,13 +45,6 @@ def main():
         choices=("single", "mixed", "double"),
         help="precision mode for CUDA or OpenCL: single, mixed, or double",
     )
-    parser.add_argument(
-        "--hours",
-        default=11.5,
-        dest="run_hours",
-        type=float,
-        help="target simulation length in hours",
-    )
 
     args = parser.parse_args()
 

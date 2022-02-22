@@ -232,15 +232,19 @@ def run_omm(options):
     startTime_f = startTime.in_units_of(u.nanoseconds).format("%.3f")
     endTime_f = endTime.in_units_of(u.nanoseconds).format("%.3f")
     remaining_steps = round((endTime - startTime) / dt)
-    remaining_ns = remaining_steps * dt.value_in_unit(u.nanosecond)
+    remaining_ns = (remaining_steps * dt).value_in_unit(u.nanosecond)
     print(f"Current simulation time is {startTime_f}, running up to {endTime_f}.")
     print(f"Will run for {remaining_steps} timesteps = {remaining_ns:.3f} ns...")
-    print("")
 
     log_every = util.every(logPeriod, dt)
     save_every = util.every(trajectoryPeriod, dt)
     if remaining_steps % save_every != 0:
         raise ValueError("Remaining steps is not a multiple of trajectoryperiod")
+
+    print(f"  logging every {logPeriod} ({log_every} steps),")
+    print(f"  saving frames every {trajectoryPeriod.in_units_of(u.picosecond)} ({save_every} steps),")
+    print(f"  checkpointing on {checkpoint_file}.")
+    print("")
 
     util.add_reporters(
         simulation,

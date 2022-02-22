@@ -39,7 +39,7 @@ def get_box_size(inp):
         try:
             import warnings
 
-            print(f"Reading positions from PDB: ")
+            print(f"Reading box size from PDB: "+inp.coordinates)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
             pdb = get_pdb(inp.coordinates)
@@ -59,7 +59,7 @@ def get_coords(inp):
     else:
         import warnings
 
-        print(f"Reading positions from PDB: ")
+        print(f"Reading positions from PDB: "+inp.coordinates)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             pdb = get_pdb(inp.coordinates)
@@ -157,9 +157,6 @@ def add_reporters(
     continuing,
     checkpoint_file,
 ):
-    print(
-        f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps."
-    )
     op = "append" if continuing else "write"
     print(f"Will {op} to trajectory file {trajectory_file}.\n")
 
