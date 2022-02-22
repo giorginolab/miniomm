@@ -204,409 +204,409 @@
 * par_cation.prm for mono-, di-, and trivalent cations
 *
 !
-!ATOMS
+ATOMS
 !Following lines added from par_all36_prot.prm
-!MASS  -1  H          1.00800 ! polar H
-!MASS  -1  HC         1.00800 ! N-ter H
-!MASS  -1  HA         1.00800 ! nonpolar H
-!MASS  -1  HP         1.00800 ! aromatic H
-!MASS  -1  HB1        1.00800 ! backbone H
-!MASS  -1  HB2        1.00800 ! aliphatic backbone H, to CT2
-!MASS  -1  HR1        1.00800 ! his he1, (+) his HG,HD2
-!MASS  -1  HR2        1.00800 ! (+) his HE1
-!MASS  -1  HR3        1.00800 ! neutral his HG, HD2
-!MASS  -1  HS         1.00800 ! thiol hydrogen
-!MASS  -1  HE1        1.00800 ! for alkene; RHC=CR
-!MASS  -1  HE2        1.00800 ! for alkene; H2C=CR
-!MASS  -1  HA1        1.00800 ! alkane, CH, new LJ params (see toppar_all22_prot_aliphatic_c27.str)
-!MASS  -1  HA2        1.00800 ! alkane, CH2, new LJ params (see toppar_all22_prot_aliphatic_c27.str)
-!MASS  -1  HA3        1.00800 ! alkane, CH3, new LJ params (see toppar_all22_prot_aliphatic_c27.str)
-!MASS  -1  C         12.01100 ! carbonyl C, peptide backbone
-!MASS  -1  CA        12.01100 ! aromatic C
-!MASS  -1  CT        12.01100 ! aliphatic sp3 C, new LJ params, no hydrogens, see retinol stream file for parameters
-!MASS  -1  CT1       12.01100 ! aliphatic sp3 C for CH
-!MASS  -1  CT2       12.01100 ! aliphatic sp3 C for CH2
-!MASS  -1  CT2A      12.01100 ! from CT2 (GLU, HSP chi1/chi2 fitting) 05282010, zhu
-!MASS  -1  CT3       12.01100 ! aliphatic sp3 C for CH3
-!MASS  -1  CPH1      12.01100 ! his CG and CD2 carbons
-!MASS  -1  CPH2      12.01100 ! his CE1 carbon
-!MASS  -1  CPT       12.01100 ! trp C between rings
-!MASS  -1  CY        12.01100 ! TRP C in pyrrole ring
-!MASS  -1  CP1       12.01100 ! tetrahedral C (proline CA)
-!MASS  -1  CP2       12.01100 ! tetrahedral C (proline CB/CG)
-!MASS  -1  CP3       12.01100 ! tetrahedral C (proline CD)
-!MASS  -1  CC        12.01100 ! carbonyl C, asn,asp,gln,glu,cter,ct2
-!MASS  -1  CD        12.01100 ! carbonyl C, pres aspp,glup,ct1
-!MASS  -1  CS        12.01100 ! thiolate carbon
-!MASS  -1  CE1       12.01100 ! for alkene; RHC=CR
-!MASS  -1  CE2       12.01100 ! for alkene; H2C=CR
-!MASS  -1  CAI       12.01100 ! aromatic C next to CPT in trp
-!MASS  -1  N         14.00700 ! proline N
-!MASS  -1  NR1       14.00700 ! neutral his protonated ring nitrogen
-!MASS  -1  NR2       14.00700 ! neutral his unprotonated ring nitrogen
-!MASS  -1  NR3       14.00700 ! charged his ring nitrogen
-!MASS  -1  NH1       14.00700 ! peptide nitrogen
-!MASS  -1  NH2       14.00700 ! amide nitrogen
-!MASS  -1  NH3       14.00700 ! ammonium nitrogen
-!MASS  -1  NC2       14.00700 ! guanidinium nitrogen
-!MASS  -1  NY        14.00700 ! TRP N in pyrrole ring
-!MASS  -1  NP        14.00700 ! Proline ring NH2+ (N-terminal)
-!MASS  -1  O         15.99900 ! carbonyl oxygen
-!MASS  -1  OB        15.99900 ! carbonyl oxygen in acetic acid
-!MASS  -1  OC        15.99900 ! carboxylate oxygen
-!MASS  -1  OH1       15.99900 ! hydroxyl oxygen
-!MASS  -1  OS        15.99940 ! ester oxygen
-!MASS  -1  S         32.06000 ! sulphur
-!MASS  -1  SM        32.06000 ! sulfur C-S-S-C type
-!MASS  -1  SS        32.06000 ! thiolate sulfur
+MASS  -1  H          1.00800 ! polar H
+MASS  -1  HC         1.00800 ! N-ter H
+MASS  -1  HA         1.00800 ! nonpolar H
+MASS  -1  HP         1.00800 ! aromatic H
+MASS  -1  HB1        1.00800 ! backbone H
+MASS  -1  HB2        1.00800 ! aliphatic backbone H, to CT2
+MASS  -1  HR1        1.00800 ! his he1, (+) his HG,HD2
+MASS  -1  HR2        1.00800 ! (+) his HE1
+MASS  -1  HR3        1.00800 ! neutral his HG, HD2
+MASS  -1  HS         1.00800 ! thiol hydrogen
+MASS  -1  HE1        1.00800 ! for alkene; RHC=CR
+MASS  -1  HE2        1.00800 ! for alkene; H2C=CR
+MASS  -1  HA1        1.00800 ! alkane, CH, new LJ params (see toppar_all22_prot_aliphatic_c27.str)
+MASS  -1  HA2        1.00800 ! alkane, CH2, new LJ params (see toppar_all22_prot_aliphatic_c27.str)
+MASS  -1  HA3        1.00800 ! alkane, CH3, new LJ params (see toppar_all22_prot_aliphatic_c27.str)
+MASS  -1  C         12.01100 ! carbonyl C, peptide backbone
+MASS  -1  CA        12.01100 ! aromatic C
+MASS  -1  CT        12.01100 ! aliphatic sp3 C, new LJ params, no hydrogens, see retinol stream file for parameters
+MASS  -1  CT1       12.01100 ! aliphatic sp3 C for CH
+MASS  -1  CT2       12.01100 ! aliphatic sp3 C for CH2
+MASS  -1  CT2A      12.01100 ! from CT2 (GLU, HSP chi1/chi2 fitting) 05282010, zhu
+MASS  -1  CT3       12.01100 ! aliphatic sp3 C for CH3
+MASS  -1  CPH1      12.01100 ! his CG and CD2 carbons
+MASS  -1  CPH2      12.01100 ! his CE1 carbon
+MASS  -1  CPT       12.01100 ! trp C between rings
+MASS  -1  CY        12.01100 ! TRP C in pyrrole ring
+MASS  -1  CP1       12.01100 ! tetrahedral C (proline CA)
+MASS  -1  CP2       12.01100 ! tetrahedral C (proline CB/CG)
+MASS  -1  CP3       12.01100 ! tetrahedral C (proline CD)
+MASS  -1  CC        12.01100 ! carbonyl C, asn,asp,gln,glu,cter,ct2
+MASS  -1  CD        12.01100 ! carbonyl C, pres aspp,glup,ct1
+MASS  -1  CS        12.01100 ! thiolate carbon
+MASS  -1  CE1       12.01100 ! for alkene; RHC=CR
+MASS  -1  CE2       12.01100 ! for alkene; H2C=CR
+MASS  -1  CAI       12.01100 ! aromatic C next to CPT in trp
+MASS  -1  N         14.00700 ! proline N
+MASS  -1  NR1       14.00700 ! neutral his protonated ring nitrogen
+MASS  -1  NR2       14.00700 ! neutral his unprotonated ring nitrogen
+MASS  -1  NR3       14.00700 ! charged his ring nitrogen
+MASS  -1  NH1       14.00700 ! peptide nitrogen
+MASS  -1  NH2       14.00700 ! amide nitrogen
+MASS  -1  NH3       14.00700 ! ammonium nitrogen
+MASS  -1  NC2       14.00700 ! guanidinium nitrogen
+MASS  -1  NY        14.00700 ! TRP N in pyrrole ring
+MASS  -1  NP        14.00700 ! Proline ring NH2+ (N-terminal)
+MASS  -1  O         15.99900 ! carbonyl oxygen
+MASS  -1  OB        15.99900 ! carbonyl oxygen in acetic acid
+MASS  -1  OC        15.99900 ! carboxylate oxygen
+MASS  -1  OH1       15.99900 ! hydroxyl oxygen
+MASS  -1  OS        15.99940 ! ester oxygen
+MASS  -1  S         32.06000 ! sulphur
+MASS  -1  SM        32.06000 ! sulfur C-S-S-C type
+MASS  -1  SS        32.06000 ! thiolate sulfur
 !
 !
 !Following lines added from par_all36_lipid.prm
-!MASS  -1  HL         1.00800 ! polar H (equivalent to protein H)
-!MASS  -1  HCL        1.00800 ! charged H for PE (equivalent to protein HC)
-!MASS  -1  HOL        1.00800 ! Nucleic acid phosphate hydroxyl proton
-!MASS  -1  HAL1       1.00800 ! alphatic proton
-!MASS  -1  HAL2       1.00800 ! alphatic proton
-!MASS  -1  HAL3       1.00800 ! alphatic proton
-!MASS  -1  HEL1       1.00800 ! for alkene; RHC=CR
-!MASS  -1  HEL2       1.00800 ! for alkene; H2C=CR
-!MASS  -1  HBL        1.00800 ! POPS SER backbone H
-!MASS  -1  CL        12.01100 ! carbonyl C (acetic acid/methyl acetate)
-!MASS  -1  CTL1      12.01100 ! sp3 carbon with 1 H  (-CH1-)
-!MASS  -1  CTL2      12.01100 ! carbon of methylene group (-CH2-)
-!MASS  -1  CTL3      12.01100 ! carbon of methyl group (-CH3)
-!MASS  -1  CTL5      12.01100 ! carbon of methyl group (-CH3) for tetramethylammonium
-!MASS  -1  CEL1      12.01100 ! for alkene; RHC=CR
-!MASS  -1  CEL2      12.01100 ! for alkene; H2C=CR
-!MASS  -1  CCL       12.01100 ! for POPS
-!MASS  -1  NTL       14.00700 ! ammonium nitrogen
-!MASS  -1  NH3L      14.00700 ! nitrogen phosphatidylethanolamine
-!MASS  -1  OBL       15.99940 ! acetic acid carboxyl oxygen (e. to protein OB)
-!MASS  -1  OCL       15.99940 ! acetate oxygen
-!MASS  -1  OSL       15.99940 ! ester oxygen
-!MASS  -1  O2L       15.99940 ! Nucleic acid =O in phosphate or sulfate
-!MASS  -1  OHL       15.99940 ! Nucleic acid phosphate hydroxyl oxygen
-!MASS  -1  OSLP      15.99940 ! Phosphate oxygen, to avoid conflict with methylacetate type O
-!MASS  -1  PL        30.97400 ! phosphorus
-!MASS  -1  SL        32.06000 ! Sulfate sulfur
-!MASS  -1  CRL1      12.01100 ! sp3 carbon with 1 H on a ring  (-CH1-) for sterols
-!MASS  -1  CRL2      12.01100 ! carbon of methylene group on a ring (-CH2-) for sterols
+MASS  -1  HL         1.00800 ! polar H (equivalent to protein H)
+MASS  -1  HCL        1.00800 ! charged H for PE (equivalent to protein HC)
+MASS  -1  HOL        1.00800 ! Nucleic acid phosphate hydroxyl proton
+MASS  -1  HAL1       1.00800 ! alphatic proton
+MASS  -1  HAL2       1.00800 ! alphatic proton
+MASS  -1  HAL3       1.00800 ! alphatic proton
+MASS  -1  HEL1       1.00800 ! for alkene; RHC=CR
+MASS  -1  HEL2       1.00800 ! for alkene; H2C=CR
+MASS  -1  HBL        1.00800 ! POPS SER backbone H
+MASS  -1  CL        12.01100 ! carbonyl C (acetic acid/methyl acetate)
+MASS  -1  CTL1      12.01100 ! sp3 carbon with 1 H  (-CH1-)
+MASS  -1  CTL2      12.01100 ! carbon of methylene group (-CH2-)
+MASS  -1  CTL3      12.01100 ! carbon of methyl group (-CH3)
+MASS  -1  CTL5      12.01100 ! carbon of methyl group (-CH3) for tetramethylammonium
+MASS  -1  CEL1      12.01100 ! for alkene; RHC=CR
+MASS  -1  CEL2      12.01100 ! for alkene; H2C=CR
+MASS  -1  CCL       12.01100 ! for POPS
+MASS  -1  NTL       14.00700 ! ammonium nitrogen
+MASS  -1  NH3L      14.00700 ! nitrogen phosphatidylethanolamine
+MASS  -1  OBL       15.99940 ! acetic acid carboxyl oxygen (e. to protein OB)
+MASS  -1  OCL       15.99940 ! acetate oxygen
+MASS  -1  OSL       15.99940 ! ester oxygen
+MASS  -1  O2L       15.99940 ! Nucleic acid =O in phosphate or sulfate
+MASS  -1  OHL       15.99940 ! Nucleic acid phosphate hydroxyl oxygen
+MASS  -1  OSLP      15.99940 ! Phosphate oxygen, to avoid conflict with methylacetate type O
+MASS  -1  PL        30.97400 ! phosphorus
+MASS  -1  SL        32.06000 ! Sulfate sulfur
+MASS  -1  CRL1      12.01100 ! sp3 carbon with 1 H on a ring  (-CH1-) for sterols
+MASS  -1  CRL2      12.01100 ! carbon of methylene group on a ring (-CH2-) for sterols
 !
 !Following lines added from par_water_ions.prm
-!MASS  -1  HT         1.00800 ! TIPS3P WATER HYDROGEN
-!MASS  -1  HX         1.00800 ! hydroxide hydrogen
-!MASS  -1  OT        15.99940 ! TIPS3P WATER OXYGEN
-!MASS  -1  OX        15.99940 ! hydroxide oxygen
-!MASS  -1  LIT        6.94100 ! Lithium ion
-!MASS  -1  SOD       22.98977 ! Sodium Ion
-!MASS  -1  MG        24.30500 ! Magnesium Ion
-!MASS  -1  POT       39.09830 ! Potassium Ion
-!MASS  -1  CAL       40.08000 ! Calcium Ion
-!MASS  -1  RUB       85.46780 ! Rubidium Ion
-!MASS  -1  CES      132.90545 ! Cesium Ion
-!MASS  -1  BAR      137.32700 ! Barium Ion
-!MASS  -1  ZN        65.37000 ! zinc (II) cation
-!MASS  -1  CAD      112.41100 ! cadmium (II) cation
-!MASS  -1  CLA       35.45000 ! Chloride Ion
+MASS  -1  HT         1.00800 ! TIPS3P WATER HYDROGEN
+MASS  -1  HX         1.00800 ! hydroxide hydrogen
+MASS  -1  OT        15.99940 ! TIPS3P WATER OXYGEN
+MASS  -1  OX        15.99940 ! hydroxide oxygen
+MASS  -1  LIT        6.94100 ! Lithium ion
+MASS  -1  SOD       22.98977 ! Sodium Ion
+MASS  -1  MG        24.30500 ! Magnesium Ion
+MASS  -1  POT       39.09830 ! Potassium Ion
+MASS  -1  CAL       40.08000 ! Calcium Ion
+MASS  -1  RUB       85.46780 ! Rubidium Ion
+MASS  -1  CES      132.90545 ! Cesium Ion
+MASS  -1  BAR      137.32700 ! Barium Ion
+MASS  -1  ZN        65.37000 ! zinc (II) cation
+MASS  -1  CAD      112.41100 ! cadmium (II) cation
+MASS  -1  CLA       35.45000 ! Chloride Ion
 !
 !Following lines added from par_all36_cgenff.prm
 !hydrogens
-!MASS  -1  HGA1       1.00800 ! alphatic proton, CH
-!MASS  -1  HGA2       1.00800 ! alphatic proton, CH2
-!MASS  -1  HGA3       1.00800 ! alphatic proton, CH3
-!MASS  -1  HGA4       1.00800 ! alkene proton; RHC=
-!MASS  -1  HGA5       1.00800 ! alkene proton; H2C=CR
-!MASS  -1  HGA6       1.00800 ! aliphatic H on fluorinated C, monofluoro
-!MASS  -1  HGA7       1.00800 ! aliphatic H on fluorinated C, difluoro
-!MASS  -1  HGAAM0     1.00800 ! aliphatic H, NEUTRAL trimethylamine (#)
-!MASS  -1  HGAAM1     1.00800 ! aliphatic H, NEUTRAL dimethylamine (#)
-!MASS  -1  HGAAM2     1.00800 ! aliphatic H, NEUTRAL methylamine (#)
+MASS  -1  HGA1       1.00800 ! alphatic proton, CH
+MASS  -1  HGA2       1.00800 ! alphatic proton, CH2
+MASS  -1  HGA3       1.00800 ! alphatic proton, CH3
+MASS  -1  HGA4       1.00800 ! alkene proton; RHC=
+MASS  -1  HGA5       1.00800 ! alkene proton; H2C=CR
+MASS  -1  HGA6       1.00800 ! aliphatic H on fluorinated C, monofluoro
+MASS  -1  HGA7       1.00800 ! aliphatic H on fluorinated C, difluoro
+MASS  -1  HGAAM0     1.00800 ! aliphatic H, NEUTRAL trimethylamine (#)
+MASS  -1  HGAAM1     1.00800 ! aliphatic H, NEUTRAL dimethylamine (#)
+MASS  -1  HGAAM2     1.00800 ! aliphatic H, NEUTRAL methylamine (#)
 !(#) EXTREME care is required when doing atom typing on compounds that look like this. Use ONLY
 !on NEUTRAL METHYLAMINE groups, NOT Schiff Bases, but DO use on 2 out of 3 guanidine nitrogens
-!MASS  -1  HGP1       1.00800 ! polar H
-!MASS  -1  HGP2       1.00800 ! polar H, +ve charge
-!MASS  -1  HGP3       1.00800 ! polar H, thiol
-!MASS  -1  HGP4       1.00800 ! polar H, neutral conjugated -NH2 group (NA bases)
-!MASS  -1  HGP5       1.00800 ! polar H on quarternary ammonium salt (choline)
-!MASS  -1  HGPAM1     1.00800 ! polar H, NEUTRAL dimethylamine (#), terminal alkyne H
-!MASS  -1  HGPAM2     1.00800 ! polar H, NEUTRAL methylamine (#)
-!MASS  -1  HGPAM3     1.00800 ! polar H, NEUTRAL ammonia (#)
+MASS  -1  HGP1       1.00800 ! polar H
+MASS  -1  HGP2       1.00800 ! polar H, +ve charge
+MASS  -1  HGP3       1.00800 ! polar H, thiol
+MASS  -1  HGP4       1.00800 ! polar H, neutral conjugated -NH2 group (NA bases)
+MASS  -1  HGP5       1.00800 ! polar H on quarternary ammonium salt (choline)
+MASS  -1  HGPAM1     1.00800 ! polar H, NEUTRAL dimethylamine (#), terminal alkyne H
+MASS  -1  HGPAM2     1.00800 ! polar H, NEUTRAL methylamine (#)
+MASS  -1  HGPAM3     1.00800 ! polar H, NEUTRAL ammonia (#)
 !(#) EXTREME care is required when doing atom typing on compounds that look like this. Use ONLY
 !on NEUTRAL METHYLAMINE groups, NOT Schiff Bases, but DO use on 2 out of 3 guanidine nitrogens
-!MASS  -1  HGR51      1.00800 ! nonpolar H, neutral 5-mem planar ring C, LJ based on benzene
-!MASS  -1  HGR52      1.00800 ! Aldehyde H, formamide H (RCOH); nonpolar H, neutral 5-mem planar ring C adjacent to heteroatom or + charge
-!MASS  -1  HGR53      1.00800 ! nonpolar H, +ve charge HIS he1(+1)
-!MASS  -1  HGR61      1.00800 ! aromatic H
-!MASS  -1  HGR62      1.00800 ! nonpolar H, neutral 6-mem planar ring C adjacent to heteroatom
-!MASS  -1  HGR63      1.00800 ! nonpolar H, NAD+ nicotineamide all ring CH hydrogens
-!MASS  -1  HGR71      1.00800 ! nonpolar H, neutral 7-mem arom ring, AZUL, azulene, kevo
+MASS  -1  HGR51      1.00800 ! nonpolar H, neutral 5-mem planar ring C, LJ based on benzene
+MASS  -1  HGR52      1.00800 ! Aldehyde H, formamide H (RCOH); nonpolar H, neutral 5-mem planar ring C adjacent to heteroatom or + charge
+MASS  -1  HGR53      1.00800 ! nonpolar H, +ve charge HIS he1(+1)
+MASS  -1  HGR61      1.00800 ! aromatic H
+MASS  -1  HGR62      1.00800 ! nonpolar H, neutral 6-mem planar ring C adjacent to heteroatom
+MASS  -1  HGR63      1.00800 ! nonpolar H, NAD+ nicotineamide all ring CH hydrogens
+MASS  -1  HGR71      1.00800 ! nonpolar H, neutral 7-mem arom ring, AZUL, azulene, kevo
 !carbons
-!MASS  -1  CG1T1     12.01100 ! internal alkyne R-C#C
-!MASS  -1  CG1T2     12.01100 ! terminal alkyne H-C#C
-!MASS  -1  CG1N1     12.01100 ! C for cyano group
-!MASS  -1  CG2D1     12.01100 ! alkene; RHC= ; imine C
-!MASS  -1  CG2D2     12.01100 ! alkene; H2C=
-!MASS  -1  CG2D1O    12.01100 ! double bond C adjacent to heteroatom. In conjugated systems, the atom to which it is double bonded must be CG2DC1.
-!MASS  -1  CG2D2O    12.01100 ! double bond C adjacent to heteroatom. In conjugated systems, the atom to which it is double bonded must be CG2DC2.
-!MASS  -1  CG2DC1    12.01100 ! conjugated alkenes, R2C=CR2
-!MASS  -1  CG2DC2    12.01100 ! conjugated alkenes, R2C=CR2
-!MASS  -1  CG2DC3    12.01100 ! conjugated alkenes, H2C=
-!MASS  -1  CG2N1     12.01100 ! conjugated C in guanidine/guanidinium
-!MASS  -1  CG2N2     12.01100 ! conjugated C in amidinium cation
-!MASS  -1  CG2O1     12.01100 ! carbonyl C: amides
-!MASS  -1  CG2O2     12.01100 ! carbonyl C: esters, [neutral] carboxylic acids
-!MASS  -1  CG2O3     12.01100 ! carbonyl C: [negative] carboxylates
-!MASS  -1  CG2O4     12.01100 ! carbonyl C: aldehydes
-!MASS  -1  CG2O5     12.01100 ! carbonyl C: ketones
-!MASS  -1  CG2O6     12.01100 ! carbonyl C: urea, carbonate
-!MASS  -1  CG2O7     12.01100 ! CO2 carbon
-!MASS  -1  CG2R51    12.01100 ! 5-mem ring, his CG, CD2(0), trp
-!MASS  -1  CG2R52    12.01100 ! 5-mem ring, double bound to N, PYRZ, pyrazole
-!MASS  -1  CG2R53    12.01100 ! 5-mem ring, double bound to N and adjacent to another heteroatom, purine C8, his CE1 (0,+1), 2PDO, kevo
-!MASS  -1  CG2R57    12.01100 ! 5-mem ring, bipyrroles
-!MASS  -1  CG25C1    12.01100 ! same as CG2DC1 but in 5-membered ring with exocyclic double bond
-!MASS  -1  CG25C2    12.01100 ! same as CG2DC2 but in 5-membered ring with exocyclic double bond
-!MASS  -1  CG251O    12.01100 ! same as CG2D1O but in 5-membered ring with exocyclic double bond
-!MASS  -1  CG252O    12.01100 ! same as CG2D2O but in 5-membered ring with exocyclic double bond
-!MASS  -1  CG2R61    12.01100 ! 6-mem aromatic C
-!MASS  -1  CG2R62    12.01100 ! 6-mem aromatic C for protonated pyridine (NIC) and rings containing carbonyls (see CG2R63) (NA)
-!MASS  -1  CG2R63    12.01100 ! 6-mem aromatic amide carbon (NA) (and other 6-mem aromatic carbonyls?)
-!MASS  -1  CG2R64    12.01100 ! 6-mem aromatic amidine and guanidine carbon (between 2 or 3 Ns and double-bound to one of them), NA, PYRM
-!MASS  -1  CG2R66    12.01100 ! 6-mem aromatic carbon bound to F
-!MASS  -1  CG2R67    12.01100 ! 6-mem aromatic carbon of biphenyl
-!MASS  -1  CG2RC0    12.01100 ! 6/5-mem ring bridging C, guanine C4,C5, trp
-!MASS  -1  CG2R71    12.01100 ! 7-mem ring arom C, AZUL, azulene, kevo
-!MASS  -1  CG2RC7    12.01100 ! sp2 ring connection with single bond(!), AZUL, azulene, kevo
-!MASS  -1  CG301     12.01100 ! aliphatic C, no hydrogens, neopentane
-!MASS  -1  CG302     12.01100 ! aliphatic C, no hydrogens, trifluoromethyl
-!MASS  -1  CG311     12.01100 ! aliphatic C with 1 H, CH
-!MASS  -1  CG312     12.01100 ! aliphatic C with 1 H, difluoromethyl
-!MASS  -1  CG314     12.01100 ! aliphatic C with 1 H, adjacent to positive N (PROT NTER) (+)
-!MASS  -1  CG321     12.01100 ! aliphatic C for CH2
-!MASS  -1  CG322     12.01100 ! aliphatic C for CH2, monofluoromethyl
-!MASS  -1  CG323     12.01100 ! aliphatic C for CH2, thiolate carbon
-!MASS  -1  CG324     12.01100 ! aliphatic C for CH2, adjacent to positive N (piperidine) (+)
-!MASS  -1  CG331     12.01100 ! aliphatic C for methyl group (-CH3)
-!MASS  -1  CG334     12.01100 ! aliphatic C for methyl group (-CH3), adjacent to positive N (PROT NTER) (+)
-!MASS  -1  CG3AM0    12.01100 ! aliphatic C for CH3, NEUTRAL trimethylamine methyl carbon (#)
-!MASS  -1  CG3AM1    12.01100 ! aliphatic C for CH3, NEUTRAL dimethylamine methyl carbon (#)
-!MASS  -1  CG3AM2    12.01100 ! aliphatic C for CH3, NEUTRAL methylamine methyl carbon (#)
+MASS  -1  CG1T1     12.01100 ! internal alkyne R-C#C
+MASS  -1  CG1T2     12.01100 ! terminal alkyne H-C#C
+MASS  -1  CG1N1     12.01100 ! C for cyano group
+MASS  -1  CG2D1     12.01100 ! alkene; RHC= ; imine C
+MASS  -1  CG2D2     12.01100 ! alkene; H2C=
+MASS  -1  CG2D1O    12.01100 ! double bond C adjacent to heteroatom. In conjugated systems, the atom to which it is double bonded must be CG2DC1.
+MASS  -1  CG2D2O    12.01100 ! double bond C adjacent to heteroatom. In conjugated systems, the atom to which it is double bonded must be CG2DC2.
+MASS  -1  CG2DC1    12.01100 ! conjugated alkenes, R2C=CR2
+MASS  -1  CG2DC2    12.01100 ! conjugated alkenes, R2C=CR2
+MASS  -1  CG2DC3    12.01100 ! conjugated alkenes, H2C=
+MASS  -1  CG2N1     12.01100 ! conjugated C in guanidine/guanidinium
+MASS  -1  CG2N2     12.01100 ! conjugated C in amidinium cation
+MASS  -1  CG2O1     12.01100 ! carbonyl C: amides
+MASS  -1  CG2O2     12.01100 ! carbonyl C: esters, [neutral] carboxylic acids
+MASS  -1  CG2O3     12.01100 ! carbonyl C: [negative] carboxylates
+MASS  -1  CG2O4     12.01100 ! carbonyl C: aldehydes
+MASS  -1  CG2O5     12.01100 ! carbonyl C: ketones
+MASS  -1  CG2O6     12.01100 ! carbonyl C: urea, carbonate
+MASS  -1  CG2O7     12.01100 ! CO2 carbon
+MASS  -1  CG2R51    12.01100 ! 5-mem ring, his CG, CD2(0), trp
+MASS  -1  CG2R52    12.01100 ! 5-mem ring, double bound to N, PYRZ, pyrazole
+MASS  -1  CG2R53    12.01100 ! 5-mem ring, double bound to N and adjacent to another heteroatom, purine C8, his CE1 (0,+1), 2PDO, kevo
+MASS  -1  CG2R57    12.01100 ! 5-mem ring, bipyrroles
+MASS  -1  CG25C1    12.01100 ! same as CG2DC1 but in 5-membered ring with exocyclic double bond
+MASS  -1  CG25C2    12.01100 ! same as CG2DC2 but in 5-membered ring with exocyclic double bond
+MASS  -1  CG251O    12.01100 ! same as CG2D1O but in 5-membered ring with exocyclic double bond
+MASS  -1  CG252O    12.01100 ! same as CG2D2O but in 5-membered ring with exocyclic double bond
+MASS  -1  CG2R61    12.01100 ! 6-mem aromatic C
+MASS  -1  CG2R62    12.01100 ! 6-mem aromatic C for protonated pyridine (NIC) and rings containing carbonyls (see CG2R63) (NA)
+MASS  -1  CG2R63    12.01100 ! 6-mem aromatic amide carbon (NA) (and other 6-mem aromatic carbonyls?)
+MASS  -1  CG2R64    12.01100 ! 6-mem aromatic amidine and guanidine carbon (between 2 or 3 Ns and double-bound to one of them), NA, PYRM
+MASS  -1  CG2R66    12.01100 ! 6-mem aromatic carbon bound to F
+MASS  -1  CG2R67    12.01100 ! 6-mem aromatic carbon of biphenyl
+MASS  -1  CG2RC0    12.01100 ! 6/5-mem ring bridging C, guanine C4,C5, trp
+MASS  -1  CG2R71    12.01100 ! 7-mem ring arom C, AZUL, azulene, kevo
+MASS  -1  CG2RC7    12.01100 ! sp2 ring connection with single bond(!), AZUL, azulene, kevo
+MASS  -1  CG301     12.01100 ! aliphatic C, no hydrogens, neopentane
+MASS  -1  CG302     12.01100 ! aliphatic C, no hydrogens, trifluoromethyl
+MASS  -1  CG311     12.01100 ! aliphatic C with 1 H, CH
+MASS  -1  CG312     12.01100 ! aliphatic C with 1 H, difluoromethyl
+MASS  -1  CG314     12.01100 ! aliphatic C with 1 H, adjacent to positive N (PROT NTER) (+)
+MASS  -1  CG321     12.01100 ! aliphatic C for CH2
+MASS  -1  CG322     12.01100 ! aliphatic C for CH2, monofluoromethyl
+MASS  -1  CG323     12.01100 ! aliphatic C for CH2, thiolate carbon
+MASS  -1  CG324     12.01100 ! aliphatic C for CH2, adjacent to positive N (piperidine) (+)
+MASS  -1  CG331     12.01100 ! aliphatic C for methyl group (-CH3)
+MASS  -1  CG334     12.01100 ! aliphatic C for methyl group (-CH3), adjacent to positive N (PROT NTER) (+)
+MASS  -1  CG3AM0    12.01100 ! aliphatic C for CH3, NEUTRAL trimethylamine methyl carbon (#)
+MASS  -1  CG3AM1    12.01100 ! aliphatic C for CH3, NEUTRAL dimethylamine methyl carbon (#)
+MASS  -1  CG3AM2    12.01100 ! aliphatic C for CH3, NEUTRAL methylamine methyl carbon (#)
 !(#) EXTREME care is required when doing atom typing on compounds that look like this. Use ONLY
 !on NEUTRAL METHYLAMINE groups, NOT ETHYL, NOT Schiff Bases, but DO use on 2 out of 3 guanidine nitrogens
-!MASS  -1  CG3C31    12.01100 ! cyclopropyl carbon
-!MASS  -1  CG3C41    12.01100 ! cyclobutyl carbon
-!MASS  -1  CG3C50    12.01100 ! 5-mem ring aliphatic quaternary C (cholesterol, bile acids)
-!MASS  -1  CG3C51    12.01100 ! 5-mem ring aliphatic CH  (proline CA, furanoses)
-!MASS  -1  CG3C52    12.01100 ! 5-mem ring aliphatic CH2 (proline CB/CG/CD, THF, deoxyribose)
-!MASS  -1  CG3C53    12.01100 ! 5-mem ring aliphatic CH  adjacent to positive N (proline.H+ CA) (+)
-!MASS  -1  CG3C54    12.01100 ! 5-mem ring aliphatic CH2 adjacent to positive N (proline.H+ CD) (+)
-!MASS  -1  CG3RC1    12.01100 ! bridgehead in bicyclic systems containing at least one 5-membered or smaller ring
+MASS  -1  CG3C31    12.01100 ! cyclopropyl carbon
+MASS  -1  CG3C41    12.01100 ! cyclobutyl carbon
+MASS  -1  CG3C50    12.01100 ! 5-mem ring aliphatic quaternary C (cholesterol, bile acids)
+MASS  -1  CG3C51    12.01100 ! 5-mem ring aliphatic CH  (proline CA, furanoses)
+MASS  -1  CG3C52    12.01100 ! 5-mem ring aliphatic CH2 (proline CB/CG/CD, THF, deoxyribose)
+MASS  -1  CG3C53    12.01100 ! 5-mem ring aliphatic CH  adjacent to positive N (proline.H+ CA) (+)
+MASS  -1  CG3C54    12.01100 ! 5-mem ring aliphatic CH2 adjacent to positive N (proline.H+ CD) (+)
+MASS  -1  CG3RC1    12.01100 ! bridgehead in bicyclic systems containing at least one 5-membered or smaller ring
 !(+) Includes protonated Shiff base (NG3D5, NG2R52 in 2HPP) but NOT amidinium (NG2R52 in IMIM), guanidinium
 !nitrogens
-!MASS  -1  NG1T1     14.00700 ! N for cyano group
-!MASS  -1  NG1D1     14.00700 ! terminal N in azides, lsk
-!MASS  -1  NG2D1     14.00700 ! N for neutral imine/Schiff's base (C=N-R, acyclic amidine, gunaidine)
-!MASS  -1  NG2S0     14.00700 ! N,N-disubstituted amide, proline N (CO=NRR')
-!MASS  -1  NG2S1     14.00700 ! peptide nitrogen (CO=NHR)
-!MASS  -1  NG2S2     14.00700 ! terminal amide nitrogen (CO=NH2)
-!MASS  -1  NG2S3     14.00700 ! external amine ring nitrogen (planar/aniline), phosphoramidate
-!MASS  -1  NG2S4     14.00700 ! neutral hydroxamic acid
-!MASS  -1  NG2O1     14.00700 ! NITB, nitrobenzene
-!MASS  -1  NG2P1     14.00700 ! N for protonated imine/Schiff's base (C=N(+)H-R, acyclic amidinium, guanidinium)
-!MASS  -1  NG2R43    14.00700 ! amide in 4-memebered ring (planar), AZDO, lsk
-!MASS  -1  NG2R50    14.00700 ! double bound neutral 5-mem planar ring, purine N7
-!MASS  -1  NG2R51    14.00700 ! single bound neutral 5-mem planar (all atom types sp2) ring, his, trp pyrrole (fused)
-!MASS  -1  NG2R52    14.00700 ! protonated schiff base, amidinium, guanidinium in 5-membered ring, HIS, 2HPP, kevo
-!MASS  -1  NG2R53    14.00700 ! amide in 5-memebered NON-SP2 ring (slightly pyramidized), 2PDO, kevo
-!MASS  -1  NG2R57    14.00700 ! 5-mem ring, bipyrroles
-!MASS  -1  NG2R60    14.00700 ! double bound neutral 6-mem planar ring, pyr1, pyzn
-!MASS  -1  NG2R61    14.00700 ! single bound neutral 6-mem planar ring imino nitrogen; glycosyl linkage
-!MASS  -1  NG2R62    14.00700 ! double bound 6-mem planar ring with heteroatoms in o or m, pyrd, pyrm
-!MASS  -1  NG2R67    14.00700 ! 6-mem planar ring substituted with 6-mem planar ring (N-phenyl pyridinones etc.)
-!MASS  -1  NG2RC0    14.00700 ! 6/5-mem ring bridging N, indolizine, INDZ, kevo
-!MASS  -1  NG301     14.00700 ! neutral trimethylamine nitrogen
-!MASS  -1  NG311     14.00700 ! neutral dimethylamine nitrogen
-!MASS  -1  NG321     14.00700 ! neutral methylamine nitrogen
-!MASS  -1  NG331     14.00700 ! neutral ammonia nitrogen
-!MASS  -1  NG3C51    14.00700 ! secondary sp3 amine in 5-membered ring
-!MASS  -1  NG3N1     14.00700 ! N in hydrazine, HDZN
-!MASS  -1  NG3P0     14.00700 ! quarternary N+, choline
-!MASS  -1  NG3P1     14.00700 ! tertiary NH+ (PIP)
-!MASS  -1  NG3P2     14.00700 ! secondary NH2+ (proline)
-!MASS  -1  NG3P3     14.00700 ! primary NH3+, phosphatidylethanolamine
+MASS  -1  NG1T1     14.00700 ! N for cyano group
+MASS  -1  NG1D1     14.00700 ! terminal N in azides, lsk
+MASS  -1  NG2D1     14.00700 ! N for neutral imine/Schiff's base (C=N-R, acyclic amidine, gunaidine)
+MASS  -1  NG2S0     14.00700 ! N,N-disubstituted amide, proline N (CO=NRR')
+MASS  -1  NG2S1     14.00700 ! peptide nitrogen (CO=NHR)
+MASS  -1  NG2S2     14.00700 ! terminal amide nitrogen (CO=NH2)
+MASS  -1  NG2S3     14.00700 ! external amine ring nitrogen (planar/aniline), phosphoramidate
+MASS  -1  NG2S4     14.00700 ! neutral hydroxamic acid
+MASS  -1  NG2O1     14.00700 ! NITB, nitrobenzene
+MASS  -1  NG2P1     14.00700 ! N for protonated imine/Schiff's base (C=N(+)H-R, acyclic amidinium, guanidinium)
+MASS  -1  NG2R43    14.00700 ! amide in 4-memebered ring (planar), AZDO, lsk
+MASS  -1  NG2R50    14.00700 ! double bound neutral 5-mem planar ring, purine N7
+MASS  -1  NG2R51    14.00700 ! single bound neutral 5-mem planar (all atom types sp2) ring, his, trp pyrrole (fused)
+MASS  -1  NG2R52    14.00700 ! protonated schiff base, amidinium, guanidinium in 5-membered ring, HIS, 2HPP, kevo
+MASS  -1  NG2R53    14.00700 ! amide in 5-memebered NON-SP2 ring (slightly pyramidized), 2PDO, kevo
+MASS  -1  NG2R57    14.00700 ! 5-mem ring, bipyrroles
+MASS  -1  NG2R60    14.00700 ! double bound neutral 6-mem planar ring, pyr1, pyzn
+MASS  -1  NG2R61    14.00700 ! single bound neutral 6-mem planar ring imino nitrogen; glycosyl linkage
+MASS  -1  NG2R62    14.00700 ! double bound 6-mem planar ring with heteroatoms in o or m, pyrd, pyrm
+MASS  -1  NG2R67    14.00700 ! 6-mem planar ring substituted with 6-mem planar ring (N-phenyl pyridinones etc.)
+MASS  -1  NG2RC0    14.00700 ! 6/5-mem ring bridging N, indolizine, INDZ, kevo
+MASS  -1  NG301     14.00700 ! neutral trimethylamine nitrogen
+MASS  -1  NG311     14.00700 ! neutral dimethylamine nitrogen
+MASS  -1  NG321     14.00700 ! neutral methylamine nitrogen
+MASS  -1  NG331     14.00700 ! neutral ammonia nitrogen
+MASS  -1  NG3C51    14.00700 ! secondary sp3 amine in 5-membered ring
+MASS  -1  NG3N1     14.00700 ! N in hydrazine, HDZN
+MASS  -1  NG3P0     14.00700 ! quarternary N+, choline
+MASS  -1  NG3P1     14.00700 ! tertiary NH+ (PIP)
+MASS  -1  NG3P2     14.00700 ! secondary NH2+ (proline)
+MASS  -1  NG3P3     14.00700 ! primary NH3+, phosphatidylethanolamine
 !oxygens
-!MASS  -1  OG2D1     15.99940 ! carbonyl O: amides, esters, [neutral] carboxylic acids, aldehydes, uera
-!MASS  -1  OG2D2     15.99940 ! carbonyl O: negative groups: carboxylates, carbonate
-!MASS  -1  OG2D3     15.99940 ! carbonyl O: ketones
-!MASS  -1  OG2D4     15.99940 ! 6-mem aromatic carbonyl oxygen (nucleic bases)
-!MASS  -1  OG2D5     15.99940 ! CO2 oxygen
-!MASS  -1  OG2N1     15.99940 ! NITB, nitrobenzene
-!MASS  -1  OG2P1     15.99940 ! =O in phosphate or sulfate
-!MASS  -1  OG2R50    15.99940 ! FURA, furan
-!MASS  -1  OG3R60    15.99940 ! O in 6-mem cyclic enol ether (PY01, PY02) or ester
-!MASS  -1  OG301     15.99940 ! ether -O- !SHOULD WE HAVE A SEPARATE ENOL ETHER??? IF YES, SHOULD WE MERGE IT WITH OG3R60???
-!MASS  -1  OG302     15.99940 ! ester -O-
-!MASS  -1  OG303     15.99940 ! phosphate/sulfate ester oxygen
-!MASS  -1  OG304     15.99940 ! linkage oxygen in pyrophosphate/pyrosulphate
-!MASS  -1  OG311     15.99940 ! hydroxyl oxygen
-!MASS  -1  OG312     15.99940 ! ionized alcohol oxygen
-!MASS  -1  OG3C31    15.99940 ! epoxide oxygen, 1EOX, 1BOX, sc
-!MASS  -1  OG3C51    15.99940 ! 5-mem furanose ring oxygen (ether)
-!MASS  -1  OG3C61    15.99940 ! DIOX, dioxane, ether in 6-membered ring !SHOULD WE MERGE THIS WITH OG3R60???
+MASS  -1  OG2D1     15.99940 ! carbonyl O: amides, esters, [neutral] carboxylic acids, aldehydes, uera
+MASS  -1  OG2D2     15.99940 ! carbonyl O: negative groups: carboxylates, carbonate
+MASS  -1  OG2D3     15.99940 ! carbonyl O: ketones
+MASS  -1  OG2D4     15.99940 ! 6-mem aromatic carbonyl oxygen (nucleic bases)
+MASS  -1  OG2D5     15.99940 ! CO2 oxygen
+MASS  -1  OG2N1     15.99940 ! NITB, nitrobenzene
+MASS  -1  OG2P1     15.99940 ! =O in phosphate or sulfate
+MASS  -1  OG2R50    15.99940 ! FURA, furan
+MASS  -1  OG3R60    15.99940 ! O in 6-mem cyclic enol ether (PY01, PY02) or ester
+MASS  -1  OG301     15.99940 ! ether -O- !SHOULD WE HAVE A SEPARATE ENOL ETHER??? IF YES, SHOULD WE MERGE IT WITH OG3R60???
+MASS  -1  OG302     15.99940 ! ester -O-
+MASS  -1  OG303     15.99940 ! phosphate/sulfate ester oxygen
+MASS  -1  OG304     15.99940 ! linkage oxygen in pyrophosphate/pyrosulphate
+MASS  -1  OG311     15.99940 ! hydroxyl oxygen
+MASS  -1  OG312     15.99940 ! ionized alcohol oxygen
+MASS  -1  OG3C31    15.99940 ! epoxide oxygen, 1EOX, 1BOX, sc
+MASS  -1  OG3C51    15.99940 ! 5-mem furanose ring oxygen (ether)
+MASS  -1  OG3C61    15.99940 ! DIOX, dioxane, ether in 6-membered ring !SHOULD WE MERGE THIS WITH OG3R60???
 !sulphurs
-!MASS  -1  SG2D1     32.06000 ! thiocarbonyl S
-!MASS  -1  SG2R50    32.06000 ! THIP, thiophene
-!MASS  -1  SG311     32.06000 ! sulphur, SH, -S-
-!MASS  -1  SG301     32.06000 ! sulfur C-S-S-C type
-!MASS  -1  SG302     32.06000 ! thiolate sulfur (-1)
-!MASS  -1  SG3O1     32.06000 ! sulfate -1 sulfur
-!MASS  -1  SG3O2     32.06000 ! neutral sulfone/sulfonamide sulfur
-!MASS  -1  SG3O3     32.06000 ! neutral sulfoxide sulfur
+MASS  -1  SG2D1     32.06000 ! thiocarbonyl S
+MASS  -1  SG2R50    32.06000 ! THIP, thiophene
+MASS  -1  SG311     32.06000 ! sulphur, SH, -S-
+MASS  -1  SG301     32.06000 ! sulfur C-S-S-C type
+MASS  -1  SG302     32.06000 ! thiolate sulfur (-1)
+MASS  -1  SG3O1     32.06000 ! sulfate -1 sulfur
+MASS  -1  SG3O2     32.06000 ! neutral sulfone/sulfonamide sulfur
+MASS  -1  SG3O3     32.06000 ! neutral sulfoxide sulfur
 !halogens
-!MASS  -1  CLGA1     35.45300 ! CLET, DCLE, chloroethane, 1,1-dichloroethane
-!MASS  -1  CLGA3     35.45300 ! TCLE, 1,1,1-trichloroethane
-!MASS  -1  CLGR1     35.45300 ! CHLB, chlorobenzene
-!MASS  -1  BRGA1     79.90400 ! BRET, bromoethane
-!MASS  -1  BRGA2     79.90400 ! DBRE, 1,1-dibromoethane
-!MASS  -1  BRGA3     79.90400 ! TBRE, 1,1,1-dibromoethane
-!MASS  -1  BRGR1     79.90400 ! BROB, bromobenzene
-!MASS  -1  IGR1     126.90447 ! IODB, iodobenzene
-!MASS  -1  FGA1      18.99800 ! aliphatic fluorine, monofluoro
-!MASS  -1  FGA2      18.99800 ! aliphatic fluorine, difluoro
-!MASS  -1  FGA3      18.99800 ! aliphatic fluorine, trifluoro
-!MASS  -1  FGP1      18.99800 ! anionic F, for ALF4 AlF4-
-!MASS  -1  FGR1      18.99800 ! aromatic flourine
+MASS  -1  CLGA1     35.45300 ! CLET, DCLE, chloroethane, 1,1-dichloroethane
+MASS  -1  CLGA3     35.45300 ! TCLE, 1,1,1-trichloroethane
+MASS  -1  CLGR1     35.45300 ! CHLB, chlorobenzene
+MASS  -1  BRGA1     79.90400 ! BRET, bromoethane
+MASS  -1  BRGA2     79.90400 ! DBRE, 1,1-dibromoethane
+MASS  -1  BRGA3     79.90400 ! TBRE, 1,1,1-dibromoethane
+MASS  -1  BRGR1     79.90400 ! BROB, bromobenzene
+MASS  -1  IGR1     126.90447 ! IODB, iodobenzene
+MASS  -1  FGA1      18.99800 ! aliphatic fluorine, monofluoro
+MASS  -1  FGA2      18.99800 ! aliphatic fluorine, difluoro
+MASS  -1  FGA3      18.99800 ! aliphatic fluorine, trifluoro
+MASS  -1  FGP1      18.99800 ! anionic F, for ALF4 AlF4-
+MASS  -1  FGR1      18.99800 ! aromatic flourine
 !miscellaneous
-!MASS  -1  PG0       30.97380 ! neutral phosphate
-!MASS  -1  PG1       30.97380 ! phosphate -1
-!MASS  -1  PG2       30.97380 ! phosphate -2
-!MASS  -1  ALG1      26.98154 ! Aluminum, for ALF4, AlF4-
-!MASS  -1  LPH        0.00000 ! Lone pair for halogens
-!MASS  -1  SG2P1     32.06000 ! mono-thio S-P bond; lsk
-!MASS  -1  OG2S1     15.99940 ! mono-thio S-P bond modulated oxygen; lsk
-!MASS  -1  SG2P2     32.06000 ! di-thio S-P bond; lsk
+MASS  -1  PG0       30.97380 ! neutral phosphate
+MASS  -1  PG1       30.97380 ! phosphate -1
+MASS  -1  PG2       30.97380 ! phosphate -2
+MASS  -1  ALG1      26.98154 ! Aluminum, for ALF4, AlF4-
+MASS  -1  LPH        0.00000 ! Lone pair for halogens
+MASS  -1  SG2P1     32.06000 ! mono-thio S-P bond; lsk
+MASS  -1  OG2S1     15.99940 ! mono-thio S-P bond modulated oxygen; lsk
+MASS  -1  SG2P2     32.06000 ! di-thio S-P bond; lsk
 !
 !Following lines added from par_all36_na.prm
-!MASS  -1  HN1        1.00800 ! Nucleic acid amine proton
-!MASS  -1  HN2        1.00800 ! Nucleic acid ring nitrogen proton
-!MASS  -1  HN3        1.00800 ! Nucleic acid aromatic carbon proton
-!MASS  -1  HN4        1.00800 ! Nucleic acid phosphate hydroxyl proton
-!MASS  -1  HN5        1.00800 ! Nucleic acid ribose hydroxyl proton
-!MASS  -1  HN6        1.00800 ! Nucleic acid ribose aliphatic proton
-!MASS  -1  HN7        1.00800 ! Nucleic acid proton (equivalent to protein HA)
-!MASS  -1  HN8        1.00800 ! Bound to CN8 in nucleic acids/model compounds
-!MASS  -1  HN9        1.00800 ! Bound to CN9 in nucleic acids/model compounds
-!MASS  -1  CN1       12.01100 ! Nucleic acid carbonyl carbon
-!MASS  -1  CN1T      12.01100 ! Nucleic acid carbonyl carbon (T/U C2)
-!MASS  -1  CN2       12.01100 ! Nucleic acid aromatic carbon to amide
-!MASS  -1  CN3       12.01100 ! Nucleic acid aromatic carbon 
-!MASS  -1  CN3T      12.01100 ! Nucleic acid aromatic carbon, Thy C5
-!MASS  -1  CN4       12.01100 ! Nucleic acid purine C8 and ADE C2  
-!MASS  -1  CN5       12.01100 ! Nucleic acid purine C4 and C5
-!MASS  -1  CN5G      12.01100 ! Nucleic acid guanine C5
-!MASS  -1  CN7       12.01100 ! Nucleic acid carbon (equivalent to protein CT1)
-!MASS  -1  CN7B      12.01100 ! Nucleic acid aliphatic carbon for C1'
-!MASS  -1  CN8       12.01100 ! Nucleic acid carbon (equivalent to protein CT2)
-!MASS  -1  CN8B      12.01100 ! Nucleic acid carbon (equivalent to protein CT2)
-!MASS  -1  CN9       12.01100 ! Nucleic acid carbon (equivalent to protein CT3)
-!MASS  -1  NN1       14.00700 ! Nucleic acid amide nitrogen
-!MASS  -1  NN2       14.00700 ! Nucleic acid protonated ring nitrogen
-!MASS  -1  NN2B      14.00700 ! From NN2, for N9 in GUA different from ADE
-!MASS  -1  NN2U      14.00700 ! Nucleic acid protonated ring nitrogen, ura N3
-!MASS  -1  NN2G      14.00700 ! Nucleic acid protonated ring nitrogen, gua N1
-!MASS  -1  NN3       14.00700 ! Nucleic acid unprotonated ring nitrogen 
-!MASS  -1  NN3A      14.00700 ! Nucleic acid unprotonated ring nitrogen, ade N1 and N3
-!MASS  -1  NN3G      14.00700 ! Nucleic acid unprotonated ring nitrogen, gua N3
-!MASS  -1  NN4       14.00700 ! Nucleic acid purine N7
-!MASS  -1  NN6       14.00700 ! Nucleic acid sp3 amine nitrogen (equiv to protein nh3)
-!MASS  -1  ON1       15.99940 ! Nucleic acid carbonyl oxygen
-!MASS  -1  ON1C      15.99940 ! Nucleic acid carbonyl oxygen, cyt O2
-!MASS  -1  ON2       15.99940 ! Nucleic acid phosphate ester oxygen
-!MASS  -1  ON3       15.99940 ! Nucleic acid =O in phosphate 
-!MASS  -1  ON4       15.99940 ! Nucleic acid phosphate hydroxyl oxygen
-!MASS  -1  ON5       15.99940 ! Nucleic acid ribose hydroxyl oxygen
-!MASS  -1  ON6       15.99940 ! Nucleic acid deoxyribose ring oxygen
-!MASS  -1  ON6B      15.99940 ! Nucleic acid ribose ring oxygen
-!MASS  -1  P         30.97400 ! phosphorus
-!MASS  -1  P2        30.97400 ! phosphorus, adm, 2011 DNA update
+MASS  -1  HN1        1.00800 ! Nucleic acid amine proton
+MASS  -1  HN2        1.00800 ! Nucleic acid ring nitrogen proton
+MASS  -1  HN3        1.00800 ! Nucleic acid aromatic carbon proton
+MASS  -1  HN4        1.00800 ! Nucleic acid phosphate hydroxyl proton
+MASS  -1  HN5        1.00800 ! Nucleic acid ribose hydroxyl proton
+MASS  -1  HN6        1.00800 ! Nucleic acid ribose aliphatic proton
+MASS  -1  HN7        1.00800 ! Nucleic acid proton (equivalent to protein HA)
+MASS  -1  HN8        1.00800 ! Bound to CN8 in nucleic acids/model compounds
+MASS  -1  HN9        1.00800 ! Bound to CN9 in nucleic acids/model compounds
+MASS  -1  CN1       12.01100 ! Nucleic acid carbonyl carbon
+MASS  -1  CN1T      12.01100 ! Nucleic acid carbonyl carbon (T/U C2)
+MASS  -1  CN2       12.01100 ! Nucleic acid aromatic carbon to amide
+MASS  -1  CN3       12.01100 ! Nucleic acid aromatic carbon 
+MASS  -1  CN3T      12.01100 ! Nucleic acid aromatic carbon, Thy C5
+MASS  -1  CN4       12.01100 ! Nucleic acid purine C8 and ADE C2  
+MASS  -1  CN5       12.01100 ! Nucleic acid purine C4 and C5
+MASS  -1  CN5G      12.01100 ! Nucleic acid guanine C5
+MASS  -1  CN7       12.01100 ! Nucleic acid carbon (equivalent to protein CT1)
+MASS  -1  CN7B      12.01100 ! Nucleic acid aliphatic carbon for C1'
+MASS  -1  CN8       12.01100 ! Nucleic acid carbon (equivalent to protein CT2)
+MASS  -1  CN8B      12.01100 ! Nucleic acid carbon (equivalent to protein CT2)
+MASS  -1  CN9       12.01100 ! Nucleic acid carbon (equivalent to protein CT3)
+MASS  -1  NN1       14.00700 ! Nucleic acid amide nitrogen
+MASS  -1  NN2       14.00700 ! Nucleic acid protonated ring nitrogen
+MASS  -1  NN2B      14.00700 ! From NN2, for N9 in GUA different from ADE
+MASS  -1  NN2U      14.00700 ! Nucleic acid protonated ring nitrogen, ura N3
+MASS  -1  NN2G      14.00700 ! Nucleic acid protonated ring nitrogen, gua N1
+MASS  -1  NN3       14.00700 ! Nucleic acid unprotonated ring nitrogen 
+MASS  -1  NN3A      14.00700 ! Nucleic acid unprotonated ring nitrogen, ade N1 and N3
+MASS  -1  NN3G      14.00700 ! Nucleic acid unprotonated ring nitrogen, gua N3
+MASS  -1  NN4       14.00700 ! Nucleic acid purine N7
+MASS  -1  NN6       14.00700 ! Nucleic acid sp3 amine nitrogen (equiv to protein nh3)
+MASS  -1  ON1       15.99940 ! Nucleic acid carbonyl oxygen
+MASS  -1  ON1C      15.99940 ! Nucleic acid carbonyl oxygen, cyt O2
+MASS  -1  ON2       15.99940 ! Nucleic acid phosphate ester oxygen
+MASS  -1  ON3       15.99940 ! Nucleic acid =O in phosphate 
+MASS  -1  ON4       15.99940 ! Nucleic acid phosphate hydroxyl oxygen
+MASS  -1  ON5       15.99940 ! Nucleic acid ribose hydroxyl oxygen
+MASS  -1  ON6       15.99940 ! Nucleic acid deoxyribose ring oxygen
+MASS  -1  ON6B      15.99940 ! Nucleic acid ribose ring oxygen
+MASS  -1  P         30.97400 ! phosphorus
+MASS  -1  P2        30.97400 ! phosphorus, adm, 2011 DNA update
 !
 !Following lines added from par_all36_prot_arg0.prm
-!MASS  -1  HRA3       1.00800 ! alphatic proton, CH3
-!MASS  -1  HRP2       1.00800 ! polar H, +ve charge
-!MASS  -1  HRM1       1.00800 ! polar H, dimethylamine
-!MASS  -1  HRM2       1.00800 ! polar H, methylamine
-!MASS  -1  CRN1      12.01100 ! conjugated C in Arg/guanidinium
-!MASS  -1  CR33      12.01100 ! aliphatic C for methyl group (-CH3)
-!MASS  -1  NRC4      14.00700 ! N for deprotonated Schiff's base
-!MASS  -1  NRN1      14.00700 ! dimethylamine nitrogen
-!MASS  -1  NRN2      14.00700 ! methylamine nitrogen
+MASS  -1  HRA3       1.00800 ! alphatic proton, CH3
+MASS  -1  HRP2       1.00800 ! polar H, +ve charge
+MASS  -1  HRM1       1.00800 ! polar H, dimethylamine
+MASS  -1  HRM2       1.00800 ! polar H, methylamine
+MASS  -1  CRN1      12.01100 ! conjugated C in Arg/guanidinium
+MASS  -1  CR33      12.01100 ! aliphatic C for methyl group (-CH3)
+MASS  -1  NRC4      14.00700 ! N for deprotonated Schiff's base
+MASS  -1  NRN1      14.00700 ! dimethylamine nitrogen
+MASS  -1  NRN2      14.00700 ! methylamine nitrogen
 !
 !Following lines added from par_ions_won.prm
-!MASS  -1  Li1p       6.94000 ! Lithium
-!MASS  -1  Na1p      22.99000 ! Sodium
-!MASS  -1  K1p       39.09000 ! Potassium
-!MASS  -1  Rb1p      85.46000 ! Rubidium
-!MASS  -1  Cs1p     132.91000 ! Cesium
-!MASS  -1  Cu1p      63.54600 ! Copper
-!MASS  -1  Ag1p     107.87000 ! Silver
-!MASS  -1  Au1p     196.97000 ! Gold
-!MASS  -1  Ti1p      47.86700 ! Titanium
-!MASS  -1  Be2p       9.01220 ! Beryllium
-!MASS  -1  Mg2p      24.30500 ! Magnesium
-!MASS  -1  Ca2p      40.07800 ! Calcium
-!MASS  -1  Sr2p      87.62000 ! Strontium
-!MASS  -1  Ba2p 1    37.33 00 ! Barium
-!MASS  -1  Ra2p     226.03000 ! Radium
-!MASS  -1  V2p       50.94200 ! Vanadium
-!MASS  -1  Cr2p      51.99600 ! Chromium
-!MASS  -1  Mn2p      54.93800 ! Manganese
-!MASS  -1  Fe2p      55.85400 ! Iron
-!MASS  -1  Co2p      58.93300 ! Cobalt
-!MASS  -1  Ni2p      58.69300 ! Nickel
-!MASS  -1  Cu2p      63.54600 ! Copper
-!MASS  -1  Zn2p      65.38000 ! Zinc
-!MASS  -1  Pd2p     106.42000 ! Palladium
-!MASS  -1  Ag2p     107.87000 ! Silver
-!MASS  -1  Cd2p 1    12.41000 ! Cadmium
-!MASS  -1  Sn2p     118.71000 ! Tin
-!MASS  -1  Pt2p     195.08000 ! Platinum
-!MASS  -1  Hg2p     200.59000 ! Mercury
-!MASS  -1  Pb2p     207.20000 ! Lead
-!MASS  -1  Sm2p     150.36000 ! Samarium
-!MASS  -1  Eu2p     151.96000 ! Europium
-!MASS  -1  Yb2p     173.05000 ! Ytterbium
-!MASS  -1  Al3p      26.98200 ! Aluminum
-!MASS  -1  Sc3p      44.95600 ! Scandium
-!MASS  -1  Y3p       88.90600 ! Yttrium
-!MASS  -1  La3p     138.91000 ! Lanthanum
-!MASS  -1  Ce3p     140.12000 ! Cerium
-!MASS  -1  Pr3p     140.91000 ! Praseodynium
-!MASS  -1  Nd3p     144.24000 ! Neodynium
-!MASS  -1  Pm3p     144.91000 ! Promethium
-!MASS  -1  Sm3p     150.36000 ! Samarium
-!MASS  -1  Eu3p     151.96000 ! Europium
-!MASS  -1  Gd3p     157.25000 ! Gadolinium
-!MASS  -1  Tb3p     158.93000 ! Terbium
-!MASS  -1  Dy3p     162.50000 ! Dysprosium
-!MASS  -1  Ho3p     164.93000 ! Holmium
-!MASS  -1  Er3p     167.28000 ! Erbium
-!MASS  -1  Tm3p     168.93000 ! Thulium
-!MASS  -1  Yb3p     173.05000 ! Ytterbium
-!MASS  -1  Lu3p     174.97000 ! Lutetium
-!MASS  -1  U3p      238.03000 ! Uranium
-!MASS  -1  Pu3p     244.06000 ! Plutonium
-!MASS  -1  Ti3p      47.86700 ! Titanium
-!MASS  -1  V3p       50.94200 ! Vanadium
-!MASS  -1  Cr3p      51.99600 ! Chromium
-!MASS  -1  Mn3p      54.93800 ! Manganese
-!MASS  -1  Fe3p      55.85400 ! Iron
-!MASS  -1  Co3p      58.93300 ! Cobalt
-!MASS  -1  Ga3p      69.72300 ! Gallium
-!MASS  -1  Rh3p     102.91000 ! Rhodium
-!MASS  -1  In3p     114.82000 ! Indium
-!MASS  -1  Au3p     196.97000 ! Gold
-!MASS  -1  Tl3p     204.38000 ! Thallium
-!MASS  -1  Bi3p     208.98000 ! Bismuth
+MASS  -1  Li1p       6.94000 ! Lithium
+MASS  -1  Na1p      22.99000 ! Sodium
+MASS  -1  K1p       39.09000 ! Potassium
+MASS  -1  Rb1p      85.46000 ! Rubidium
+MASS  -1  Cs1p     132.91000 ! Cesium
+MASS  -1  Cu1p      63.54600 ! Copper
+MASS  -1  Ag1p     107.87000 ! Silver
+MASS  -1  Au1p     196.97000 ! Gold
+MASS  -1  Ti1p      47.86700 ! Titanium
+MASS  -1  Be2p       9.01220 ! Beryllium
+MASS  -1  Mg2p      24.30500 ! Magnesium
+MASS  -1  Ca2p      40.07800 ! Calcium
+MASS  -1  Sr2p      87.62000 ! Strontium
+MASS  -1  Ba2p 1    37.33 00 ! Barium
+MASS  -1  Ra2p     226.03000 ! Radium
+MASS  -1  V2p       50.94200 ! Vanadium
+MASS  -1  Cr2p      51.99600 ! Chromium
+MASS  -1  Mn2p      54.93800 ! Manganese
+MASS  -1  Fe2p      55.85400 ! Iron
+MASS  -1  Co2p      58.93300 ! Cobalt
+MASS  -1  Ni2p      58.69300 ! Nickel
+MASS  -1  Cu2p      63.54600 ! Copper
+MASS  -1  Zn2p      65.38000 ! Zinc
+MASS  -1  Pd2p     106.42000 ! Palladium
+MASS  -1  Ag2p     107.87000 ! Silver
+MASS  -1  Cd2p 1    12.41000 ! Cadmium
+MASS  -1  Sn2p     118.71000 ! Tin
+MASS  -1  Pt2p     195.08000 ! Platinum
+MASS  -1  Hg2p     200.59000 ! Mercury
+MASS  -1  Pb2p     207.20000 ! Lead
+MASS  -1  Sm2p     150.36000 ! Samarium
+MASS  -1  Eu2p     151.96000 ! Europium
+MASS  -1  Yb2p     173.05000 ! Ytterbium
+MASS  -1  Al3p      26.98200 ! Aluminum
+MASS  -1  Sc3p      44.95600 ! Scandium
+MASS  -1  Y3p       88.90600 ! Yttrium
+MASS  -1  La3p     138.91000 ! Lanthanum
+MASS  -1  Ce3p     140.12000 ! Cerium
+MASS  -1  Pr3p     140.91000 ! Praseodynium
+MASS  -1  Nd3p     144.24000 ! Neodynium
+MASS  -1  Pm3p     144.91000 ! Promethium
+MASS  -1  Sm3p     150.36000 ! Samarium
+MASS  -1  Eu3p     151.96000 ! Europium
+MASS  -1  Gd3p     157.25000 ! Gadolinium
+MASS  -1  Tb3p     158.93000 ! Terbium
+MASS  -1  Dy3p     162.50000 ! Dysprosium
+MASS  -1  Ho3p     164.93000 ! Holmium
+MASS  -1  Er3p     167.28000 ! Erbium
+MASS  -1  Tm3p     168.93000 ! Thulium
+MASS  -1  Yb3p     173.05000 ! Ytterbium
+MASS  -1  Lu3p     174.97000 ! Lutetium
+MASS  -1  U3p      238.03000 ! Uranium
+MASS  -1  Pu3p     244.06000 ! Plutonium
+MASS  -1  Ti3p      47.86700 ! Titanium
+MASS  -1  V3p       50.94200 ! Vanadium
+MASS  -1  Cr3p      51.99600 ! Chromium
+MASS  -1  Mn3p      54.93800 ! Manganese
+MASS  -1  Fe3p      55.85400 ! Iron
+MASS  -1  Co3p      58.93300 ! Cobalt
+MASS  -1  Ga3p      69.72300 ! Gallium
+MASS  -1  Rh3p     102.91000 ! Rhodium
+MASS  -1  In3p     114.82000 ! Indium
+MASS  -1  Au3p     196.97000 ! Gold
+MASS  -1  Tl3p     204.38000 ! Thallium
+MASS  -1  Bi3p     208.98000 ! Bismuth
 !
 !standard C36 additive truncation
 BONDS
