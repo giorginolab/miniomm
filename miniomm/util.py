@@ -11,32 +11,34 @@ from miniomm.namdxsc import *
 
 
 _cachedPdb = {}
+
+
 def get_pdb(n):
     if n not in _cachedPdb:
         _cachedPdb[n] = app.PDBFile(n)
     return _cachedPdb[n]
 
 
-
 def parse_boxsize_units(txt):
     box = [float(x) for x in txt.split(" ")]
-    boxa = mm.Vec3(box[0], 0., 0.) * u.angstrom
-    boxb = mm.Vec3(0., box[1],  0.) * u.angstrom
-    boxc = mm.Vec3(0., 0., box[2]) * u.angstrom
+    boxa = mm.Vec3(box[0], 0.0, 0.0) * u.angstrom
+    boxb = mm.Vec3(0.0, box[1], 0.0) * u.angstrom
+    boxc = mm.Vec3(0.0, 0.0, box[2]) * u.angstrom
     return (boxa, boxb, boxc)
 
 
 def get_box_size(inp):
-    if 'extendedsystem' in inp:
-        print("Reading box size from "+inp.extendedsystem)
+    if "extendedsystem" in inp:
+        print("Reading box size from " + inp.extendedsystem)
         (boxa, boxb, boxc) = parse_xsc_units(inp.extendedsystem)
-    elif 'boxsize' in inp:
-        print("Using boxsize from input string "+inp.boxsize)
+    elif "boxsize" in inp:
+        print("Using boxsize from input string " + inp.boxsize)
         (boxa, boxb, boxc) = parse_boxsize_units(inp.boxsize)
     else:
         print("Last resort: PDB CRYST1...")
         try:
             import warnings
+
             print(f"Reading positions from PDB: ")
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
@@ -44,17 +46,19 @@ def get_box_size(inp):
             (boxa, boxb, boxc) = pdb.topology.getPeriodicBoxVectors()
         except:
             raise ValueError("Failed to load CRYST1 information")
-    print("Using this cell:\n   " + str(boxa) +
-          "\n   " + str(boxb) + "\n   " + str(boxc))
+    print(
+        "Using this cell:\n   " + str(boxa) + "\n   " + str(boxb) + "\n   " + str(boxc)
+    )
     return (boxa, boxb, boxc)
 
 
 def get_coords(inp):
-    if 'bincoordinates' in inp:
-        print(f"Reading positions from NAMDBin: "+inp.bincoordinates)
+    if "bincoordinates" in inp:
+        print(f"Reading positions from NAMDBin: " + inp.bincoordinates)
         coords = NAMDBin(inp.bincoordinates).getPositions()
     else:
         import warnings
+
         print(f"Reading positions from PDB: ")
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -72,7 +76,7 @@ def plumed_parser(fn):
         for l in f:
             l = l.strip()
             if "#" in l:
-                l = l[:l.find("#")]  # Strip comments
+                l = l[: l.find("#")]  # Strip comments
             dots = l.find("...")
             if not continuing:
                 if dots == -1:
@@ -90,7 +94,7 @@ def plumed_parser(fn):
 
 
 def every(T, t):
-    f = T/t
+    f = T / t
     if not f.is_integer():
         raise ValueError(f"{T} is not a multiple of {t}")
     return int(f)
@@ -115,13 +119,15 @@ def get_best_platform():
 
 def round_state_time(ctx, grain):
     from openmm.unit.quantity import Quantity
-    t = ctx.getState().getTime()
-#    t_fs = t.value_in_unit(u.femtosecond)
-    t_r = round(t/grain)*grain
-    t_diff = t_r - t
-    print(f"Rounding state time by {t_diff.value_in_unit(u.femtosecond)} fs to closest {grain.value_in_unit(u.femtosecond)} fs: {t} -> {t_r}") 
-    ctx.setTime(t_r)
 
+    t = ctx.getState().getTime()
+    #    t_fs = t.value_in_unit(u.femtosecond)
+    t_r = round(t / grain) * grain
+    t_diff = t_r - t
+    print(
+        f"Rounding state time by {t_diff.value_in_unit(u.femtosecond)} fs to closest {grain.value_in_unit(u.femtosecond)} fs: {t} -> {t_r}"
+    )
+    ctx.setTime(t_r)
 
 
 def check_openmm():
@@ -135,36 +141,52 @@ def check_openmm():
     Platform.loadPluginsFromDirectory(plugindir)
     errs = Platform.getPluginLoadFailures()
     if len(errs):
-        print("Some errors were found loading plugins. Some platforms may not be available: \n")
+        print(
+            "Some errors were found loading plugins. Some platforms may not be available: \n"
+        )
     for x in errs:
         print(x)
 
 
-def add_reporters(simulation, trajectory_file, log_every, save_every,
-                  total_steps, continuing, checkpoint_file):
+def add_reporters(
+    simulation,
+    trajectory_file,
+    log_every,
+    save_every,
+    total_steps,
+    continuing,
+    checkpoint_file,
+):
     print(
-        f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps.")
+        f"Reporting every {log_every} steps and checkpointing on {checkpoint_file} every {save_every} steps."
+    )
     op = "append" if continuing else "write"
     print(f"Will {op} to trajectory file {trajectory_file}.\n")
 
-    basename="output"
-    fp=open(f"{basename}.log", "a" if continuing else "w")
-    simulation.reporters.append(app.DCDReporter(trajectory_file, save_every,
-                                                append=continuing, enforcePeriodicBox=False))
-    simulation.reporters.append(app.CheckpointReporter(checkpoint_file,
-                                                       save_every))
+    basename = "output"
+    fp = open(f"{basename}.log", "a" if continuing else "w")
+    simulation.reporters.append(
+        app.DCDReporter(
+            trajectory_file, save_every, append=continuing, enforcePeriodicBox=False
+        )
+    )
+    simulation.reporters.append(app.CheckpointReporter(checkpoint_file, save_every))
     simulation.reporters.append(StdoutLogReporter(log_every, total_steps))
-    simulation.reporters.append(app.StateDataReporter(fp,
-                                                      log_every,
-                                                      step=True,
-                                                      time=True,
-                                                      potentialEnergy=True,
-                                                      kineticEnergy=True,
-                                                      totalEnergy=True,
-                                                      temperature=True,
-                                                      volume=True,
-                                                      progress=True,
-                                                      remainingTime=True,
-                                                      speed=True,
-                                                      totalSteps=total_steps,
-                                                      separator='\t'))
+    simulation.reporters.append(
+        app.StateDataReporter(
+            fp,
+            log_every,
+            step=True,
+            time=True,
+            potentialEnergy=True,
+            kineticEnergy=True,
+            totalEnergy=True,
+            temperature=True,
+            volume=True,
+            progress=True,
+            remainingTime=True,
+            speed=True,
+            totalSteps=total_steps,
+            separator="\t",
+        )
+    )

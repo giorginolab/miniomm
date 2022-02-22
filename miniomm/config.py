@@ -13,15 +13,15 @@ class MultiOrderedDict(OrderedDict):
             super().__setitem__(key, value)
 
 
-class Config():
+class Config:
     def __init__(self, fn):
         self.warnings = []
         self.usedKeys = {}
-        self.cp = configparser.RawConfigParser(dict_type=MultiOrderedDict,
-                                               delimiters=[' ', "\t", '='],
-                                               strict=False)
+        self.cp = configparser.RawConfigParser(
+            dict_type=MultiOrderedDict, delimiters=[" ", "\t", "="], strict=False
+        )
         with open(fn) as f:
-            self.cp.read_string('['+root_section+"]\n"+f.read())
+            self.cp.read_string("[" + root_section + "]\n" + f.read())
 
     def get(self, k):
         self.usedKeys[k.lower()] = 1
@@ -60,13 +60,12 @@ class Config():
 
     def printWarnings(self):
         for m in self.warnings:
-             print(m)
+            print(m)
         unused_keys = self.unusedKeys()
         if len(unused_keys):
-             print("WARNING: These input keys were given but are unused in this run: ")
-             for u in unused_keys:
-                  print(" - "+u)
-
+            print("WARNING: These input keys were given but are unused in this run: ")
+            for u in unused_keys:
+                print(" - " + u)
 
 
 if __name__ == "__main__":
