@@ -10,7 +10,7 @@
 ```
 
 
-A simple, supercomputer-friendly OpenMM wrapper for common-case MD runs, with minimal dependencies.
+A simple, HPC-friendly OpenMM wrapper for common-case MD runs, with minimal dependencies.
 
 It works if it works for me.
 
