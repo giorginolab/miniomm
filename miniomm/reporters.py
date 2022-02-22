@@ -147,7 +147,7 @@ class StdoutLogReporter:
 
         box = state.getPeriodicBoxVectors()
         v = box[0][0] * box[1][1] * box[2][2]
-        volume = v.value_in_unit(nanometer**3)
+        volume = v.value_in_unit(nanometer ** 3)
         if self._lastvol:
             fluctuation = 100.0 * (volume / self._lastvol - 1.0)
         else:

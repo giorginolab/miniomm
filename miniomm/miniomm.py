@@ -34,6 +34,9 @@ from miniomm.namdxsc import write_xsc
 #   Randomized velocities
 
 checkpoint_file = "miniomm_restart.chk"
+DEF_CUTOFF = 9.0
+DEF_SWITCHDIST = 7.5
+DEF_FRICTION = 0.1
 
 
 def _printPluginInfo():
@@ -41,11 +44,11 @@ def _printPluginInfo():
     print(
         f"""
            $OPENMM_CUDA_COMPILER: {os.environ.get('OPENMM_CUDA_COMPILER','(Undefined)')}
-       OpenMM Library Path (...): {lp}
-                  Loaded Plugins: """
+      OpenMM Library Path ($OMM): {lp}
+                  Loaded Plugins: """, 
     )
     for p in mm.pluginLoadedLibNames:
-        print("                                  " + p.replace(lp, "..."))
+        print("                                  " + p.replace(lp, "$OMM"))
     print("            Loaded Plugin errors:")
     for e in mm.Platform.getPluginLoadFailures():
         print("                                  " + e)
@@ -71,10 +74,10 @@ def run_omm(options):
         nonbondedMethod = app.NoCutoff
     else:
         nonbondedMethod = app.PME
-    nonbondedCutoff = float(inp.getWithDefault("cutoff", 9.0)) * u.angstrom
-    switchDistance = float(inp.getWithDefault("switchdistance", 7.5)) * u.angstrom
+    nonbondedCutoff = float(inp.getWithDefault("cutoff", DEF_CUTOFF)) * u.angstrom
+    switchDistance = float(inp.getWithDefault("switchdistance", DEF_SWITCHDIST)) * u.angstrom
     frictionCoefficient = (
-        float(inp.getWithDefault("thermostatdamping", 0.1)) / u.picosecond
+        float(inp.getWithDefault("thermostatdamping", DEF_FRICTION)) / u.picosecond
     )
 
     endTime = run_steps * dt
@@ -242,7 +245,9 @@ def run_omm(options):
         raise ValueError("Remaining steps is not a multiple of trajectoryperiod")
 
     print(f"  logging every {logPeriod} ({log_every} steps),")
-    print(f"  saving frames every {trajectoryPeriod.in_units_of(u.picosecond)} ({save_every} steps),")
+    print(
+        f"  saving frames every {trajectoryPeriod.in_units_of(u.picosecond)} ({save_every} steps),"
+    )
     print(f"  checkpointing on {checkpoint_file}.")
     print("")
 
