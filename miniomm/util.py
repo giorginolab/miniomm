@@ -10,9 +10,8 @@ from miniomm.namdbin import NAMDBin
 from miniomm.namdxsc import *
 
 
+# Cache PDB files because loading is slow
 _cachedPdb = {}
-
-
 def get_pdb(n):
     if n not in _cachedPdb:
         _cachedPdb[n] = app.PDBFile(n)

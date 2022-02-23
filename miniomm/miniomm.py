@@ -134,7 +134,7 @@ def run_omm(options):
     run_type = None
     if "parmfile" in inp:
         run_type = "AMBER"
-    elif "pararameters" in inp:
+    elif "parameters" in inp:
         run_type = "CHARMM"
     elif "openmmsystem" in inp:
         run_type = "OpenMM"
