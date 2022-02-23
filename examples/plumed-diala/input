@@ -6,7 +6,7 @@ structure    dia2.psf
 coordinates  dia2.pdb
 
 # ffield
-parameters   par_all27_prot_lipid.prm
+parameters   par_all22_prot.prm
 boxsize 32 32 32
 
 # integrator

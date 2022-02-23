@@ -42,6 +42,7 @@ def main():
     )
     parser.add_argument(
         "--precision",
+        default="mixed",
         choices=("single", "mixed", "double"),
         help="precision mode for CUDA or OpenCL: single, mixed, or double",
     )
