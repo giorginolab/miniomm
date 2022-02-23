@@ -45,7 +45,7 @@ def _printPluginInfo():
         f"""
            $OPENMM_CUDA_COMPILER: {os.environ.get('OPENMM_CUDA_COMPILER','(Undefined)')}
       OpenMM Library Path ($OMM): {lp}
-                  Loaded Plugins: """, 
+                  Loaded Plugins: """,
     )
     for p in mm.pluginLoadedLibNames:
         print("                                  " + p.replace(lp, "$OMM"))
@@ -75,7 +75,9 @@ def run_omm(options):
     else:
         nonbondedMethod = app.PME
     nonbondedCutoff = float(inp.getWithDefault("cutoff", DEF_CUTOFF)) * u.angstrom
-    switchDistance = float(inp.getWithDefault("switchdistance", DEF_SWITCHDIST)) * u.angstrom
+    switchDistance = (
+        float(inp.getWithDefault("switchdistance", DEF_SWITCHDIST)) * u.angstrom
+    )
     frictionCoefficient = (
         float(inp.getWithDefault("thermostatdamping", DEF_FRICTION)) / u.picosecond
     )
@@ -127,7 +129,21 @@ def run_omm(options):
     )
     _printPluginInfo()
 
+
+    # -------------------------------------------------------
+    run_type = None
     if "parmfile" in inp:
+        run_type = "AMBER"
+    elif "pararameters" in inp:
+        run_type = "CHARMM"
+    elif "openmmsystem" in inp:
+        run_type = "OpenMM"
+    else:
+        raise ValueError("Could not detect run type (AMBER/CHARMM/OpenMM)")
+
+    
+    # -------------------------------------------------------
+    if run_type == "AMBER":
         print(f"Creating an AMBER system...")
         if "structure" in inp:
             print("Warning: 'structure' given but ignored for AMBER")
@@ -141,7 +157,7 @@ def run_omm(options):
             rigidWater=rigidWater,
         )
         topology = prmtop.topology
-    else:
+    elif run_type == "CHARMM":
         print(f"Creating a CHARMM system...")
         psf = app.CharmmPsfFile(inp.structure)
         try:
@@ -152,9 +168,8 @@ def run_omm(options):
                 "** Error reading parameter set. Make sure the ATOMS section and MASS items are present in the parameter file."
             )
             raise e
-        psf.setBox(50.0 * u.angstrom, 50.0 * u.angstrom, 50.0 * u.angstrom)  # otherwise
-        # refuses
-        # PME
+        # The following is necessary otherwise PME fails. Box is replaced later
+        psf.setBox(50.0 * u.angstrom, 50.0 * u.angstrom, 50.0 * u.angstrom)  
         system = psf.createSystem(
             params,
             nonbondedMethod=nonbondedMethod,
@@ -165,7 +180,15 @@ def run_omm(options):
             rigidWater=rigidWater,
         )
         topology = psf.topology
+    elif run_type == "OpenMM":
+        print(f"Creating an OpenMM XML system...")
+        system = mm.XmlSerializer.deserialize(open(inp.openmmsystem).read())
+        topology = app.PDBFile(inp.structure).topology
+        
 
+        
+
+    # -------------------------------------------------------
     if "barostat" in inp and inp.getboolean("barostat"):
         pressure = float(inp.barostatpressure) * u.bar
         print(f"Enabling barostat at {pressure}...")
@@ -200,16 +223,19 @@ def run_omm(options):
         print(f"Successfully loaded {checkpoint_file}, resuming simulation...")
         resuming = True
 
+    elif "openmmstate" in inp:
+        print(f"Attempting resume from OpenMM state {inp.openmmstate}...")
+        simulation.loadState(inp.openmmstate)
+        
     else:
         print(
             f"File {checkpoint_file} absent, starting simulation from the beginning..."
         )
         coords = util.get_coords(inp)
         ctx.setPositions(coords)
-
-    if not resuming:
-        (boxa, boxb, boxc) = util.get_box_size(inp)
-        ctx.setPeriodicBoxVectors(boxa, boxb, boxc)
+        if not resuming:
+            (boxa, boxb, boxc) = util.get_box_size(inp)
+            ctx.setPeriodicBoxVectors(boxa, boxb, boxc)
 
         if "minimize" in inp:
             print(f"Minimizing for max {inp.minimize} iterations...")
@@ -236,20 +262,19 @@ def run_omm(options):
     endTime_f = endTime.in_units_of(u.nanoseconds).format("%.3f")
     remaining_steps = round((endTime - startTime) / dt)
     remaining_ns = (remaining_steps * dt).value_in_unit(u.nanosecond)
-    print(f"Current simulation time is {startTime_f}, running up to {endTime_f}.")
-    print(f"Will run for {remaining_steps} timesteps = {remaining_ns:.3f} ns...")
 
     log_every = util.every(logPeriod, dt)
     save_every = util.every(trajectoryPeriod, dt)
     if remaining_steps % save_every != 0:
         raise ValueError("Remaining steps is not a multiple of trajectoryperiod")
 
-    print(f"  logging every {logPeriod} ({log_every} steps),")
     print(
-        f"  saving frames every {trajectoryPeriod.in_units_of(u.picosecond)} ({save_every} steps),"
+        f"Current simulation time is {startTime_f}, running up to {endTime_f}:\n"
+        f"  will run for {remaining_steps} timesteps = {remaining_ns:.3f} ns,\n"
+        f"  logging every {logPeriod} ({log_every} steps),\n"
+        f"  saving frames every {trajectoryPeriod.in_units_of(u.picosecond)} ({save_every} steps),\n"
+        f"  checkpointing on {checkpoint_file}.\n"
     )
-    print(f"  checkpointing on {checkpoint_file}.")
-    print("")
 
     util.add_reporters(
         simulation,

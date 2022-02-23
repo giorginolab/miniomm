@@ -1,0 +1,6 @@
+
+openmmsystem out.system.xml
+openmmstate out.state.xml
+structure   out.topo.pdb
+
+run         100000
