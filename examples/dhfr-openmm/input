@@ -1,0 +1,6 @@
+
+openmmsystem dhfr.mini.system.xml
+openmmstate dhfr.mini.state.xml
+structure   dhfr.mini.pdb
+
+run         100000
