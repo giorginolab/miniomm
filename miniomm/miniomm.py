@@ -2,6 +2,7 @@ import sys
 import os.path
 import socket
 import datetime
+import math
 
 from openmm import app
 import openmm as mm
@@ -11,6 +12,7 @@ from miniomm.config import Config
 import miniomm.util as util
 from miniomm.namdbin import NAMDBin
 from miniomm.namdxsc import write_xsc
+import miniomm.atomrestraint as atrest
 
 
 # Order of priority for the operation to perform
@@ -250,6 +252,23 @@ def run_omm(options):
                 print(f"Resetting thermal velocities at {temperature}")
                 ctx.setVelocitiesToTemperature(temperature)
 
+
+        # -------------------------------------------------------
+    if "atomrestraint" in inp:
+        print("\nApplying restraints...")
+        atrest_dict = atrest.atrest_parser(inp.get("atomrestraint"), run_steps, dt)
+        atrest.add_restraints(simulation, atrest_dict)
+        print(
+            f'Restraints summary:\n'
+            f'  With the selection "{atrest_dict["selection"]}", {atrest_dict["n_atoms"]} atoms have been restrained.\n'
+            f'  Forces acting on {atrest_dict["axes"]} axes.\n'
+            f'  Number of setpoints: {len(atrest_dict["setpoints"])}'
+            )
+        for setpoint in atrest_dict["setpoints"]:
+            time_in_ps = (setpoint["step"] * dt).value_in_unit(u.picoseconds)
+            print(f'    - {setpoint["force"]} kcal/(mol*A^2) at step {setpoint["step"]} ({time_in_ps} ps)')
+
+
     # -------------------------------------------------------
     print("")
     inp.printWarnings()
@@ -290,7 +309,26 @@ def run_omm(options):
     simulation.saveState(f"miniomm_pre.xml")
 
     # ----------------------------------------
-    simulation.step(remaining_steps)
+    if "atomrestraint" not in inp:
+        simulation.step(remaining_steps)
+    else:
+        starting_step = run_steps - remaining_steps
+        starting_percent = math.floor(starting_step/run_steps * 1000)
+        force, gradient = atrest.get_starting_force_and_gradient(starting_percent, atrest_dict)
+        simulation.context.setParameter('k', force)
+
+        for current_percent in range(starting_percent, 1000):
+
+            for atrest_setpoint in atrest_dict["setpoints"]:
+                if current_percent == atrest_setpoint["percent"]:
+                    force = atrest_setpoint["force"]
+                    gradient = atrest.get_force_gradient(atrest_setpoint, atrest_dict)
+                    simulation.context.setParameter('k', force)
+
+            simulation.step(int(run_steps/1000))
+
+            force += gradient
+            simulation.context.setParameter('k', force)
 
     # ----------------------------------------
     simulation.saveState(f"miniomm_post.xml")
