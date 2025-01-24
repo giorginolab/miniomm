@@ -27,7 +27,10 @@ environment for MD runs without requiring C++ or Python coding.
 
 ## Installation
 
-In principle, the usual `pip install miniomm` should be sufficient.
+In principle, the usual `pip install -e .` should be sufficient
+after checking out this repository. The version on PyPI currently
+lags behind. 
+
 However, you will need additional software:
 
  * OpenMM and its Python interface
@@ -57,7 +60,7 @@ Supports
 
 Does not support
 
- * Restraints of any kind
+ * Restraints of any kind (tentative implementation is in place)
 
 May support in the future, given sufficient interest
 
